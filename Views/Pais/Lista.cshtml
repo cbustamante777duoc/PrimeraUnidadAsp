@@ -1,0 +1,43 @@
+﻿@using MiPrimeraAppNetCore.clases;
+@{
+    ViewData["Title"] = "Lista";
+
+    List<InstructorCLS> listaEnamorados = new List<InstructorCLS>();
+    InstructorCLS oInstructorCLS = new InstructorCLS();
+    oInstructorCLS.nombre = "Cristian";
+    oInstructorCLS.apellido = "Bustamante";
+    oInstructorCLS.SegundoApellido = "Araya";
+    listaEnamorados.Add(oInstructorCLS);
+    oInstructorCLS = new InstructorCLS();
+    oInstructorCLS.nombre = "jennie";
+    oInstructorCLS.apellido = "kim";
+    oInstructorCLS.SegundoApellido = "Cheongdam-dong";
+    listaEnamorados.Add(oInstructorCLS);
+}
+
+<h1>Lista Pagina Por Defecto</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Apellido Materno</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (InstructorCLS item in listaEnamorados)
+        {
+        <tr>
+            <td>@item.nombre</td>
+            <td>@item.apellido</td>
+            
+        </tr>
+
+        }
+    </tbody>
+</table>
+
+

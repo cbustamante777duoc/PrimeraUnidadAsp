@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "Inicio";
+    string mensaje = "curso Asp";
+    int suma = 10 + 30;
+    string[] nombres = { "Cristian", "Bustamante", "Jennie",  "Kim" };
+}
+<h1>el mensaje es : @mensaje</h1>
+<h1>la suma es: @suma</h1>
+<h1>Mi pagina de inicio a partir de mi contralador Pais</h1>
+
+@foreach (string nom in nombres)
+{
+    @if (nom.StartsWith("C") || nom.StartsWith("J")) 
+    {
+        <h2>El nombre de la persona es @nom</h2>
+    }
+}
+

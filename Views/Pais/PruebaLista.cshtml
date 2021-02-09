@@ -1,0 +1,27 @@
+﻿@using MiPrimeraAppNetCore.clases;
+@model IEnumerable<InstructorCLS>
+@{
+    ViewData["Title"] = "PruebaLista";
+}
+
+<h1>PruebaLista</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (InstructorCLS item in Model)
+        {
+            <tr>
+                <td>@item.nombre</td>
+                <td>@item.apellido</td>
+
+            </tr>
+
+        }
+    </tbody>
+</table>
