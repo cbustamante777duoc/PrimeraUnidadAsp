@@ -50,7 +50,7 @@ namespace MiPrimeraAppNetCore
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Pais}/{action=PruebaLista}/{id?}");
+                    pattern: "{controller=Especialidad}/{action=Index}/{id?}");
             });
         }
     }

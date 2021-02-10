@@ -1,0 +1,31 @@
+﻿@using MiPrimeraAppNetCore.Clases;
+@model IEnumerable<EspecialidadCLS> 
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center">lista de especialidad</h1>
+
+<table class="table table-dark">
+    <thead class="bg-primary">
+        <tr>
+            <th> Id Especialidad</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (EspecialidadCLS item in Model)
+        {
+        <tr>
+            <td>@item.iidespecilidad</td>
+            <td>@item.nombre</td>
+            <td>@item.descripcion</td>
+        </tr>
+
+        }
+
+    </tbody>
+
+</table>
+
