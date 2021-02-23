@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MiPrimeraAppNetCore.Clases.MedicamentoCLS>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center" >Listado Medicamentos</h1>
+
+<p>
+
+<table class="table table-dark">
+    <thead class="bg-primary">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.iidMedicamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.stock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombreFormaFarmaceutica)
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.iidMedicamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.precio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.stock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nombreFormaFarmaceutica)
+            </td>
+           
+        </tr>
+}
+    </tbody>
+</table>

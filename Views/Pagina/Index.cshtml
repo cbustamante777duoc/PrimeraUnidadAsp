@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MiPrimeraAppNetCore.Clases.PaginaCLS>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<h1 class="text-center">listado Pagina</h1>
+<table class="table table-dark">
+    <thead class="bg-primary">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.iidPagina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mensaje)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.accion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.controlador)
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.iidPagina)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mensaje)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.accion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.controlador)
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>

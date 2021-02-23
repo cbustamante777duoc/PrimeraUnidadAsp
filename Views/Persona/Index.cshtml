@@ -4,14 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>listado de personas</h1>
+<h1 class="text-center">listado de personas</h1>
 <table class="table table-dark">
     <thead class="bg-primary">
         <tr>
-            <th> Id persona</th>
-            <th>Nombre completo</th>
-            <th>Email</th>
-            <th>sexo</th>
+            <th>@Html.DisplayNameFor(model=>model.iidPersona)</th>
+            <th>@Html.DisplayNameFor(model => model.nombreCompleto)</th>
+            <th>@Html.DisplayNameFor(model => model.email)</th>
+            <th>@Html.DisplayNameFor(model=>model.nombreSexo)</th>
         </tr>
     </thead>
     <tbody>
