@@ -26,7 +26,7 @@ namespace MiPrimeraAppNetCore.Controllers
                                              nombre = especialidad.Nombre,
                                              descripcion = especialidad.Descripcion
                                          }).ToList();
-
+                    ViewBag.nombreEspecialidad = "";
                 }
                 else
                 {
@@ -39,6 +39,8 @@ namespace MiPrimeraAppNetCore.Controllers
                                              nombre = especialidad.Nombre,
                                              descripcion = especialidad.Descripcion
                                          }).ToList();
+                    //para guardar lo que el usuario registro en la busqueda
+                    ViewBag.nombreEspecialidad = oEspecialidadCLS.nombre;
                 }
                 
             }

@@ -17,5 +17,8 @@ namespace MiPrimeraAppNetCore.Clases
         [Display(Name = "Genero")]
         public string nombreSexo { get; set; }
 
+        //añado idsexo para realizar filtrado por sexo
+        public int iidSexo { get; set; }
+
     }
 }

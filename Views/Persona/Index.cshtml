@@ -2,7 +2,19 @@
 @model IEnumerable<PersonaCLS>
 @{
     ViewData["Title"] = "Index";
+    List<SelectListItem> listaSexo = ViewBag.listaSexo;
 }
+
+<form id="frmEnviar" asp-controller="Persona" asp-action="Index" 
+      method="post" style="display:grid; grid-template-columns: 1fr 2fr 1fr 1fr"
+      class="mr-2">
+
+    <label>Ingrese sexo</label>
+    @Html.DropDownList("iidSexo", listaSexo, new { @class = "form form-control" })
+    <input type="submit" class="btn btn-outline-primary" value="Buscar" />
+    <input type="button" class="btn btn-outline-warning" value="Limpiar"
+           onclick="Limpiar()"/>
+</form>
 
 <h1 class="text-center">listado de personas</h1>
 <table class="table table-dark">
@@ -29,3 +41,10 @@
     </tbody>
 
 </table>
+
+<script>
+    function Limpiar() {
+        document.getElementById("iidSexo").value = "";
+        document.getElementById("frmEnviar").submit();
+    }
+</script>

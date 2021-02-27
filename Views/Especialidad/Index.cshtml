@@ -3,14 +3,15 @@
 @{
     ViewData["Title"] = "Index";
     string mensaje = ViewBag.mensaje;
+    string nombreEspecialidad = ViewBag.nombreEspecialidad;
 }
 
 <form asp-controller="Especialidad" asp-action="Index" method="post" class="mb-2"
-      style="display:grid; grid-template-columns:1fr 2fr 1fr"
-      >
+      style="display:grid; grid-template-columns:1fr 2fr 1fr 1fr" id="frmFormulario">
     <label>Ingrese nombre especialidad</label>
-    <input type="text" class="form form-control" name="nombre"/>
-    <input type="submit" value="Enviar" class="btn btn-info" />
+    <input type="text" id="nombre" class="form form-control" name="nombre" value="@nombreEspecialidad" />
+    <input type="submit" value="Buscar" class="btn btn-info" />
+    <input type="button" value="Limpiar" class="btn btn-warning" onclick="Limpiar()"/>
 </form>
 
 <h1 class="text-center">lista de especialidad</h1>
@@ -38,3 +39,14 @@
 
 </table>
 
+<script>
+    function Limpiar() {
+        //limpia el boton con el id nombre
+        document.getElementById("nombre").value = "";
+        //al momento de presionar limpiar vuelve a recargar la pagina
+        document.getElementById("frmFormulario").submit();
+
+
+
+    }
+</script>

@@ -2,10 +2,18 @@
 
 @{
     ViewData["Title"] = "Index";
+    string nombreSede = ViewBag.nombreSede;
 }
 
-<h1 class="text-center" >Listado de Sedes</h1>
+<form id="frmEnviar" asp-controller="Sede" asp-action="Index" class="mb-2" method="post"
+      style="display:grid; grid-template-columns:0.5fr 2fr 0.5fr">
+    <label>Ingrese nombre de la sede</label>
+    <input type="text" id="nombre" class="form form-control" name="nombreSede"
+           onkeyup="Buscar()" value="@nombreSede" />
+    <input type="button" value="Limpiar" class="btn btn-warning" onclick="Limpiar()" />
+</form>
 
+<h1 class="text-center" >Listado de Sedes</h1>
 
 <table class="table table-dark">
     <thead class="bg-primary">
@@ -38,3 +46,14 @@
 }
     </tbody>
 </table>
+
+<script>
+    function Buscar() {
+        document.getElementById("frmEnviar").submit();
+    }
+
+    function Limpiar() {
+        document.getElementById("nombre").value = "";
+        document.getElementById("frmEnviar").submit();
+    }
+</script>
