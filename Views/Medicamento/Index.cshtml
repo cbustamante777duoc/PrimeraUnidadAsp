@@ -2,7 +2,13 @@
 
 @{
     ViewData["Title"] = "Index";
+    List<SelectListItem> listaForma = ViewBag.listaForma;
 }
+
+<form style="display:grid; grid-template-columns:1fr 2fr" class="mb-3" id="frmEnviar">
+    <label>Ingrese el nombre de la forma farmaceutica</label>
+    @Html.DropDownList("iidFormaFarmaceutica",listaForma, new {@class="form form-control" })
+</form>
 
 <h1 class="text-center" >Listado Medicamentos</h1>
 
@@ -52,3 +58,11 @@
 }
     </tbody>
 </table>
+
+<script>
+    var iidFormaFarmaceutica = document.getElementById("iidFormaFarmaceutica");
+    iidFormaFarmaceutica.onchange = function () {
+        document.getElementById("frmEnviar").submit();
+    }
+
+</script>

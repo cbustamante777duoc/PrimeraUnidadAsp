@@ -21,5 +21,7 @@ namespace MiPrimeraAppNetCore.Clases
         public string nombreFormaFarmaceutica { get; set; }
 
 
+        public int iidFormaFarmaceutica { get; set; }
+
     }
 }
