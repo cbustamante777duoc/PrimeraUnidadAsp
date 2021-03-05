@@ -37,19 +37,15 @@
     </div>
 </div>
 
+<!--importacion de sweetAlert2-->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="~/js/generic.js"></script>
+
 <script>
+
     function abrirModal() {
         //ejecucion sweetAlert confirmar
-        Swal.fire({
-            title: '¿Desea guardar los cambios?',
-            text: "¿Deseas registrar los cambios en la base de datos?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si!'
-        }).then((result) => {
+        mostrarModal().then((result) => {
             if (result.isConfirmed) {
                 //confirmar los cambios y los guarda en la base de datos
                 var frmEnviar = document.getElementById("frmEnviar");
