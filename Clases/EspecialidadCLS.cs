@@ -12,8 +12,10 @@ namespace MiPrimeraAppNetCore.Clases
         
         public int iidespecilidad { get; set; }
         [Display(Name = "Nombre especialidad")]
+        [Required(ErrorMessage ="Ingrese el nombre de la especialidad")]
         public string nombre { get; set; }
         [Display(Name = "Descripcion")]
+        [Required(ErrorMessage = "Ingrese la descripcion de la especialidad")]
         public string descripcion { get; set; }
     }
 }

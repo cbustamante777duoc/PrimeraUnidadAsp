@@ -46,5 +46,46 @@ namespace MiPrimeraAppNetCore.Controllers
             }
             return View(ListaEspecialidad);
         }
+
+        public IActionResult Agregar() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Agregar(EspecialidadCLS oEspecialidadCLS)
+        {
+            try
+            {
+                using (BDHospitalContext db = new BDHospitalContext())
+                {
+                    //si no es valido
+                    if (!ModelState.IsValid)
+                    {
+                        //para conservar los datos que el usuario escribio
+                        return View(oEspecialidadCLS);
+                    }
+                    else
+                    {
+                        //instacia del modelo y guarda los datos
+                        Especialidad objeto = new Especialidad();
+                        objeto.Nombre = oEspecialidadCLS.nombre;
+                        objeto.Descripcion = oEspecialidadCLS.descripcion;
+                        objeto.Bhabilitado = 1;
+                        db.Especialidad.Add(objeto);
+                        db.SaveChanges();
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                //para conservar los datos que el usuario escribio
+                return View(oEspecialidadCLS);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
