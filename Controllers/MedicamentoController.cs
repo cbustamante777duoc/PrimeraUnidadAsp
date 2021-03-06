@@ -76,5 +76,12 @@ namespace MiPrimeraAppNetCore.Controllers
             }
                 return View(listaMedicamento);
         }
+
+        public IActionResult Agregar() 
+        {
+            ViewBag.listaFormaFarmaceutica = listarFormaFarmaceutica();
+            return View();
+        }
     }
+
 }
