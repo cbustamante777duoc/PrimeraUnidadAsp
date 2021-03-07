@@ -13,7 +13,7 @@
 
     <div class="col-md-6">
 
-        <form asp-action="Agregar" asp-controller="Medicamento">
+        <form asp-action="Agregar" asp-controller="Medicamento" id="frmEnviar" method="post">
 
             <div>
                 <label asp-for="nombre"></label>
@@ -27,16 +27,36 @@
                 <span asp-validation-for="concentracion" class="text-danger"></span>
             </div>
 
+            <div>
+                <label asp-for="precio"></label>
+                <input type="text" class="form form-control" asp-for="precio" />
+                <span asp-validation-for="precio" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="presentacion"></label>
+                <input type="text" class="form form-control" asp-for="presentacion" />
+                <span asp-validation-for="presentacion" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="stock"></label>
+                <input type="number" class="form form-control" asp-for="stock" />
+                <span asp-validation-for="stock" class="text-danger"></span>
+            </div>
+
 
             <div>
                 <label asp-for="iidFormaFarmaceutica"></label>
                 <select asp-for="iidFormaFarmaceutica" class="form form-control"
                         asp-items="@lista"></select>
-                <span asp-validation-for="iidFormaFarmaceutica" class="text-danger"></span>
+                <span asp-validation-for="iidFormaFarmaceutica" class="text-danger mr-2 "></span>
             </div>
 
             <div>
-                <input type="submit" value="Enviar" class="form form-control" />
+                <input type="button" value="Enviar" onclick="Abrir()" class="btn btn-outline-primary" />
+                <a class="btn btn-outline-danger" asp-action="Index" 
+                   asp-controller="Medicamento">Regresar</a>
             </div>
 
         </form>
@@ -44,4 +64,20 @@
     </div>
 
 </div>
+
+
+<script src="~/js/sweetAlert.js"></script>
+<script src="~/js/generic.js"></script>
+<script>
+
+    function Abrir() {
+
+        mostrarModal().then(res => {
+            if (res.value) {
+                var frmEnviar = document.getElementById("frmEnviar");
+                frmEnviar.submit();
+            }
+        })
+    }
+</script>
 

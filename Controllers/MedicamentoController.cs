@@ -39,7 +39,7 @@ namespace MiPrimeraAppNetCore.Controllers
             List<MedicamentoCLS> listaMedicamento = new List<MedicamentoCLS>();
             using (BDHospitalContext bd = new BDHospitalContext()) 
             {
-                if (oMedicamentoCLS.iidFormaFarmaceutica == 0)
+                if ( oMedicamentoCLS.iidFormaFarmaceutica==null|| oMedicamentoCLS.iidFormaFarmaceutica == 0)
                 {
                     listaMedicamento = (from medicamento in bd.Medicamento
                                         join formaFarmaceutica in bd.FormaFarmaceutica
@@ -81,6 +81,48 @@ namespace MiPrimeraAppNetCore.Controllers
         {
             ViewBag.listaFormaFarmaceutica = listarFormaFarmaceutica();
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Agregar(MedicamentoCLS oMedicamentoCLS) 
+        {
+            try
+            {
+                using (BDHospitalContext bd = new BDHospitalContext())
+                {
+                    //si no son validos los datos se queda en la vista
+                    if (!ModelState.IsValid)
+                    {
+                        ViewBag.listaFormaFarmaceutica = listarFormaFarmaceutica();
+                        return View(oMedicamentoCLS);
+                    }
+                    else
+                    {
+                        Medicamento medicamento = new Medicamento();
+                        medicamento.Nombre = oMedicamentoCLS.nombre;
+                        medicamento.Concentracion = oMedicamentoCLS.concentracion;
+                        medicamento.Iidformafarmaceutica = oMedicamentoCLS.iidFormaFarmaceutica;
+                        medicamento.Precio = oMedicamentoCLS.precio;
+                        medicamento.Stock = oMedicamentoCLS.stock;
+                        medicamento.Presentacion = oMedicamentoCLS.presentacion;
+                        medicamento.Bhabilitado = 1;
+                        bd.Medicamento.Add(medicamento);
+                        bd.SaveChanges();
+
+
+                    }
+
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return RedirectToAction("Index");
+        
         }
     }
 

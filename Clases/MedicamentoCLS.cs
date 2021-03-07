@@ -17,11 +17,13 @@ namespace MiPrimeraAppNetCore.Clases
         
         [Display(Name = "Precio")]
         [Required(ErrorMessage = "ingrese precio del medicamento")]
-        public decimal precio { get; set; }
+        public decimal? precio { get; set; }
 
         [Display(Name = "Stock")]
         [Required(ErrorMessage = "ingrese el stock medicamento")]
-        public int stock { get; set; }
+        [Range (0,10000, ErrorMessage="el stock debe estar en el rango de 0 a 10000")]
+        public int? stock { get; set; }
+
         [Display(Name = "Nombre de la Forma Farmaceutica")]
         public string nombreFormaFarmaceutica { get; set; }
 
@@ -33,7 +35,7 @@ namespace MiPrimeraAppNetCore.Clases
 
         [Display(Name = "selecione forma farmaceutica ")]
         [Required(ErrorMessage = "ingrese la forma farmaceutica")]
-        public int iidFormaFarmaceutica { get; set; }
+        public int? iidFormaFarmaceutica { get; set; }
 
     }
 }
