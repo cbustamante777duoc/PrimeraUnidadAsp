@@ -15,6 +15,7 @@ namespace MiPrimeraAppNetCore.Controllers
             List<PaginaCLS> listaPagina = new List<PaginaCLS>();
             using (BDHospitalContext bd = new BDHospitalContext())
             {
+                //se valida 
                 if (oPaginaCLS.mensaje==null || oPaginaCLS.mensaje=="")
                 {
                     listaPagina = (from pagina in bd.Pagina
@@ -29,6 +30,7 @@ namespace MiPrimeraAppNetCore.Controllers
                     ViewBag.mensaje = "";
 
                 }
+                //se filtra
                 else
                 {
                     listaPagina = (from pagina in bd.Pagina
@@ -52,6 +54,57 @@ namespace MiPrimeraAppNetCore.Controllers
 
             }
                 return View(listaPagina);
+        }
+
+        //mostrar el formulario
+        public IActionResult Agregar() 
+        {
+
+            return View();
+        }
+
+        //guardar los datos
+        [HttpPost]
+        public IActionResult Agregar(PaginaCLS oPaginaCLS) 
+        {
+            try
+            {
+                using (BDHospitalContext bd = new BDHospitalContext())
+                {
+                    //si no ingresa datos el usuario
+                    if (!ModelState.IsValid)
+                    {
+                        //se queda en la misma pagina
+                        return View(oPaginaCLS);
+                    }
+                    else
+                    {
+                        //instancia del modelo
+                        Pagina pagina = new Pagina();
+                        //se igualan los atributos del modelo con la clase
+                        pagina.Mensaje = oPaginaCLS.mensaje;
+                        pagina.Controlador = oPaginaCLS.controlador;
+                        pagina.Accion = oPaginaCLS.accion;
+                        //solo los habilitados
+                        pagina.Bhabilitado = 1;
+                        //se guarda en base de datos el modelo
+                        bd.Pagina.Add(pagina);
+                        //se confirma y se guardan los cambios
+                        bd.SaveChanges();
+
+                    }
+
+
+                    
+
+                }
+            }
+            catch (Exception)
+            {
+                //si hay un error se queda en la misma pagina
+                return View(oPaginaCLS);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

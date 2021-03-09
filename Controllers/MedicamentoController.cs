@@ -93,6 +93,7 @@ namespace MiPrimeraAppNetCore.Controllers
                     //si no son validos los datos se queda en la vista
                     if (!ModelState.IsValid)
                     {
+                        //variable que iguala al metodo de la forma farmaceutica
                         ViewBag.listaFormaFarmaceutica = listarFormaFarmaceutica();
                         return View(oMedicamentoCLS);
                     }
