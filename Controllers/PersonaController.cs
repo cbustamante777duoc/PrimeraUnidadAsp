@@ -42,7 +42,7 @@ namespace MiPrimeraAppNetCore.Controllers
             using (BDHospitalContext db = new BDHospitalContext()) 
             {
                 //si la lista esta vacia
-                if (oPersonaCLS.iidSexo == 0)
+                if (oPersonaCLS.iidSexo == 0 || oPersonaCLS.iidSexo==null)
                 {
                     listaPersona = (from persona in db.Persona
                                     join sexo in db.Sexo
@@ -77,5 +77,53 @@ namespace MiPrimeraAppNetCore.Controllers
            }
              return View(listaPersona);
         }
+
+        public IActionResult Agregar() 
+        {
+            LlenarSexo();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Agregar(PersonaCLS oPersonaCLS)
+        {
+            LlenarSexo();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(oPersonaCLS);
+                }
+                else
+                {
+                    using (BDHospitalContext bd = new BDHospitalContext())
+                    {
+                        Persona persona = new Persona();
+                        persona.Nombre = oPersonaCLS.nombre;
+                        persona.Appaterno = oPersonaCLS.apPaterno;
+                        persona.Apmaterno = oPersonaCLS.apMaterno;
+                        persona.Telefonofijo = oPersonaCLS.telefonoFijo;
+                        persona.Telefonocelular = oPersonaCLS.telefonoCelular;
+                        persona.Fechanacimiento= oPersonaCLS.fechaNacimiento;
+                        persona.Email= oPersonaCLS.email;
+                        persona.Iidsexo = oPersonaCLS.iidSexo;
+                        persona.Bhabilitado = 1;
+                        bd.Add(persona);
+                        bd.SaveChanges();
+
+
+                    }
+                }
+                
+            }
+            catch (Exception)
+            {
+
+                return View(oPersonaCLS);
+            }
+            return RedirectToAction("Index");
+        }
+
+
     }
 }
