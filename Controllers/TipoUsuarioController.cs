@@ -65,5 +65,44 @@ namespace MiPrimeraAppNetCore.Controllers
             }
             return View(listaTipoUsuario);
         }
+
+        public IActionResult Agregar() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Agregar(TipoUsuarioCLS oTipoUsuarioCLS)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(oTipoUsuarioCLS);
+                }
+                else
+                {
+                    using (BDHospitalContext bd = new BDHospitalContext())
+                    {
+
+                        TipoUsuario tipoUsuario = new TipoUsuario();
+                        tipoUsuario.Nombre = oTipoUsuarioCLS.nombre;
+                        tipoUsuario.Descripcion = oTipoUsuarioCLS.descripcion;
+                        tipoUsuario.Bhabilitado = 1;
+                        bd.TipoUsuario.Add(tipoUsuario);
+                        bd.SaveChanges();
+
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                return View(oTipoUsuarioCLS);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

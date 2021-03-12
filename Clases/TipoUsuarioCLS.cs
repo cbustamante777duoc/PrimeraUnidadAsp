@@ -11,9 +11,11 @@ namespace MiPrimeraAppNetCore.Clases
         [Display(Name ="id tipo usuario")]
         public int iidTipoUsuario { get; set; }
 
+        [Required(ErrorMessage = "ingrese nombre del  tipo usuario")]
         [Display(Name = "nombre del usuario")]
         public string nombre { get; set; }
 
+        [Required(ErrorMessage = "ingrese la descripcion del tipo usuario")]
         [Display(Name = "descripcion")]
         public string descripcion { get; set; }
 
