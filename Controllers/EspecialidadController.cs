@@ -87,5 +87,33 @@ namespace MiPrimeraAppNetCore.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        //el iidespecilidad lo recibe de la vista 
+        public IActionResult Eliminar(int iidespecilidad) 
+        {
+            string error;
+
+            try
+            {
+                using (BDHospitalContext bd = new BDHospitalContext())
+                {
+                    Especialidad especialidad = bd.Especialidad
+                        .Where(p => p.Iidespecialidad == iidespecilidad).First();
+
+                    especialidad.Bhabilitado = 0;
+                    bd.SaveChanges();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                error = ex.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

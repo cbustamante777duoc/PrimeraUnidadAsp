@@ -20,12 +20,13 @@
 
 <h1 class="text-center">lista de especialidad</h1>
 
-<table class="table table-dark">
-    <thead class="bg-primary">
+<table class="table table-hover table-dark table-bordered">
+    <thead  >
         <tr>
             <th>@Html.DisplayNameFor(model=>model.iidespecilidad)</th>
             <th>@Html.DisplayNameFor(model=>model.nombre)</th>
             <th>@Html.DisplayNameFor(model => model.descripcion)</th>
+            <th>Operaciones</th>
         </tr>
     </thead>
     <tbody>
@@ -35,6 +36,12 @@
             <td>@item.iidespecilidad</td>
             <td>@item.nombre</td>
             <td>@item.descripcion</td>
+            <td>
+
+                <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                   onclick="EliminarEspecialidad(@item.iidespecilidad)">
+                </i>
+            </td>
         </tr>
 
         }
@@ -43,6 +50,17 @@
 
 </table>
 
+<!--formulario para eliminar-->
+<form asp-action="Eliminar" asp-controller="Especialidad"
+      method="post" id="frmEnviarEliminar">
+    <input type="hidden" id="txtIdEspecialidad" name="iidespecilidad"/>
+</form>
+
+<!--importacion de sweetAlert-->
+<script src="~/js/sweetAlert.js"></script>
+<script src="~/js/generic.js"></script>
+
+<!--scripts-->
 <script>
     function Limpiar() {
         //limpia el boton con el id nombre
@@ -50,7 +68,17 @@
         //al momento de presionar limpiar vuelve a recargar la pagina
         document.getElementById("frmFormulario").submit();
 
+    }
 
+    function EliminarEspecialidad(iidespecilidad) {
+        document.getElementById("txtIdEspecialidad").value = iidespecilidad;
+
+        mostrarModal().then(res => {
+            if (res.value) {
+                var frmEnviarEliminar = document.getElementById("frmEnviarEliminar");
+                frmEnviarEliminar.submit();
+            }
+        })
 
     }
 </script>
