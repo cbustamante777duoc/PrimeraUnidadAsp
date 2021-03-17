@@ -27,6 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.direcion)
             </th>
+            <th>
+                Operaciones
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -41,11 +44,27 @@
             <td>
                 @Html.DisplayFor(modelItem => item.direcion)
             </td>
+            <td>
+                <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                   onclick="EliminarSede(@item.iidSede)">
+                </i>
+            </td>
             
         </tr>
 }
     </tbody>
 </table>
+
+<!--formulario de eliminar-->
+<form asp-action="Eliminar" asp-controller="Sede" 
+      method="post" id="frmEliminar">
+    
+    <input type="hidden" id="txtIdSede"  name="iidSede"/>
+
+</form>
+
+<script src="~/js/sweetAlert.js"></script>
+<script src="~/js/generic.js"></script>
 
 <script>
     function Buscar() {
@@ -55,5 +74,17 @@
     function Limpiar() {
         document.getElementById("nombre").value = "";
         document.getElementById("frmEnviar").submit();
+    }
+
+    function EliminarSede(idSede) {
+        document.getElementById("txtIdSede").value = idSede;
+
+        mostrarModal().then(res => {
+            if (res.value) {
+                var frmEliminar = document.getElementById("frmEliminar");
+                frmEliminar.submit();
+            }
+        })
+
     }
 </script>
