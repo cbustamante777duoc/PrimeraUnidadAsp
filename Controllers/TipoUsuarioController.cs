@@ -104,5 +104,20 @@ namespace MiPrimeraAppNetCore.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult Eliminar(int iidTipoUsuario) 
+        {
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                TipoUsuario tipoUsuario = bd.TipoUsuario
+                                  .Where(p => p.Iidtipousuario == iidTipoUsuario)
+                                  .First();
+                bd.TipoUsuario.Remove(tipoUsuario);
+                bd.SaveChanges();
+
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

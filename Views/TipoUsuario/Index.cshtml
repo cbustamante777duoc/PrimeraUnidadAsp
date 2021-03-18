@@ -2,8 +2,8 @@
 
 @{
     ViewData["Title"] = "Index";
-    string nombre      = ViewBag.nombre ;
-    string descripcion = ViewBag.descripcion ;
+    string nombre = ViewBag.nombre;
+    string descripcion = ViewBag.descripcion;
     int iidTipoUsuario = ViewBag.IidTipoUsuario;
 }
 
@@ -23,6 +23,9 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.descripcion)
+                </th>
+                <th>
+                    Operaciones
                 </th>
             </tr>
 
@@ -45,6 +48,9 @@
                 <th>
                     <input type="text" value="@descripcion" name="descripcion" class="form-check form-control" />
                 </th>
+                <th>
+
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -61,10 +67,36 @@
                         @Html.DisplayFor(modelItem => item.descripcion)
                     </td>
                     <td>
-                        <button>Eliminar</button>
+                        <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                           onclick="EliminarTipoUsuario(@item.iidTipoUsuario)">
+                        </i>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </form>
+
+<form asp-action="Eliminar" asp-controller="TipoUsuario" 
+      method="post" id="frmEliminar">
+
+    <input type="hidden" id="txtTipoUsu" name="iidTipoUsuario" />
+</form>
+
+<script src="~/js/sweetAlert.js"></script>
+<script src="~/js/generic.js"></script>
+
+<script>
+
+    function EliminarTipoUsuario(idTipoUsuario) {
+
+        document.getElementById("txtTipoUsu").value = idTipoUsuario;
+        mostrarModal().then(res => {
+            if (res.value) {
+                var frmEliminar = document.getElementById("frmEliminar");
+                frmEliminar.submit();
+            }
+        })
+    }
+
+</script>
