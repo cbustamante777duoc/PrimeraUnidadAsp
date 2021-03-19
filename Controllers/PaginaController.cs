@@ -106,5 +106,23 @@ namespace MiPrimeraAppNetCore.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        //eliminacion fisica
+        public IActionResult Eliminar(int iidPagina)
+        {
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                Pagina pagina = bd.Pagina
+                               .Where(p => p.Iidpagina == iidPagina).First();
+                bd.Pagina.Remove(pagina);
+                bd.SaveChanges();
+
+
+            }
+
+            return RedirectToAction("Index");
+               
+        }
     }
 }

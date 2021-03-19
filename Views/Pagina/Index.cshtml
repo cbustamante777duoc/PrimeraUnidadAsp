@@ -29,7 +29,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.controlador)
             </th>
-            
+            <th>
+                Operaciones
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -47,11 +49,25 @@
             <td>
                 @Html.DisplayFor(modelItem => item.controlador)
             </td>
+            <td>
+                <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                   onclick="EliminarPagina(@item.iidPagina)">
+                </i>
+            </td>
             
         </tr>
 }
     </tbody>
 </table>
+
+<form asp-action="Eliminar" asp-controller="Pagina" 
+      method="post" id="frmEliminar">
+
+    <input id="txtId" name="iidPagina" type="hidden" />
+</form>
+
+<script src="~/js/sweetAlert.js"></script>
+<script src="~/js/generic.js"></script>
 
 <script>
     function Limpiar() {
@@ -59,4 +75,17 @@
         document.getElementById("frmFormulario").submit();
 
     }
+
+    function EliminarPagina(idpagina) {
+        document.getElementById("txtId").value = idpagina;
+
+        mostrarModal().then(res => {
+            if (res.value) {
+                var frmEliminar = document.getElementById("frmEliminar");
+                frmEliminar.submit();
+            }
+        })
+
+    }
+
 </script>

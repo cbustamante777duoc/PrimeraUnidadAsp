@@ -105,6 +105,8 @@ namespace MiPrimeraAppNetCore.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        //eliminacion fisica 
         public IActionResult Eliminar(int iidTipoUsuario) 
         {
             using (BDHospitalContext bd = new BDHospitalContext())
