@@ -115,5 +115,24 @@ namespace MiPrimeraAppNetCore.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult Editar(int id) 
+        {
+            EspecialidadCLS oEspecialidadCLS = new EspecialidadCLS();
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                oEspecialidadCLS = (from especialidad in bd.Especialidad
+                                    where especialidad.Iidespecialidad == id
+                                    select new EspecialidadCLS
+                                    {
+                                        iidespecilidad = especialidad.Iidespecialidad,
+                                        nombre = especialidad.Nombre,
+                                        descripcion = especialidad.Descripcion
+                                    }).First();
+            }
+
+            return View(oEspecialidadCLS);
+        
+        }
     }
 }

@@ -1,0 +1,61 @@
+﻿@using MiPrimeraAppNetCore.Clases;
+@model EspecialidadCLS
+
+@{
+    ViewData["Title"] = "Agregar";
+}
+
+<h1>Editar una Especilidad</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+
+        <form asp-action="Agregar" method="post" id="frmEnviar">
+
+            <div class="form-group">
+                <label asp-for="iidespecilidad"></label>
+                <input asp-for="iidespecilidad" class="form form-control" />
+                <span asp-validation-for="iidespecilidad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="nombre"></label>
+                <input asp-for="nombre" class="form form-control" />
+                <span asp-validation-for="nombre" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+
+                <label asp-for="descripcion"></label>
+                <input asp-for="descripcion" class="form form-control" />
+                <span asp-validation-for="descripcion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="button" value="Agregar" class="btn btn-primary " onclick="abrirModal()" />
+                <a asp-action="Index" class="btn btn-danger">Regresar</a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<!--importacion de sweetAlert2-->
+<script src="~/js/sweetAlert.js"></script>
+<script src="~/js/generic.js"></script>
+
+<script>
+
+    function abrirModal() {
+        //ejecucion sweetAlert confirmar
+        mostrarModal().then((result) => {
+            if (result.isConfirmed) {
+                //confirmar los cambios y los guarda en la base de datos
+                var frmEnviar = document.getElementById("frmEnviar");
+                frmEnviar.submit();
+            }
+        })
+    }
+</script>
