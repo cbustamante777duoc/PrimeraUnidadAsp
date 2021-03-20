@@ -36,6 +36,7 @@ namespace MiPrimeraAppNetCore.Controllers
         {
             //llamada del metodo para que aparesca desde el inicio
             ViewBag.listaForma = listarFormaFarmaceutica();
+
             List<MedicamentoCLS> listaMedicamento = new List<MedicamentoCLS>();
             using (BDHospitalContext bd = new BDHospitalContext()) 
             {
@@ -82,6 +83,31 @@ namespace MiPrimeraAppNetCore.Controllers
             ViewBag.listaFormaFarmaceutica = listarFormaFarmaceutica();
             return View();
         }
+
+        //recuperar la informacion 
+        public IActionResult Editar(int id)
+        {
+            MedicamentoCLS oMedicamentoCLS = new MedicamentoCLS();
+
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                oMedicamentoCLS = (from medicamento in bd.Medicamento
+                                   where medicamento.Iidmedicamento == id
+                                   select new MedicamentoCLS
+                                   {
+                                       iidMedicamento = medicamento.Iidmedicamento,
+                                       nombre = medicamento.Nombre,
+                                       concentracion = medicamento.Concentracion,
+                                       iidFormaFarmaceutica = medicamento.Iidformafarmaceutica,
+                                       precio = medicamento.Precio,
+                                       stock = medicamento.Stock,
+                                       presentacion = medicamento.Presentacion
+                                   }).First();
+            }
+            ViewBag.listaFormaFarmaceutica = listarFormaFarmaceutica();
+            return View(oMedicamentoCLS);
+        }
+
 
         [HttpPost]
         public IActionResult Agregar(MedicamentoCLS oMedicamentoCLS) 
