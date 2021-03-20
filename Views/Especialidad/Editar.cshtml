@@ -11,11 +11,11 @@
 <div class="row">
     <div class="col-md-6">
 
-        <form asp-action="Agregar" method="post" id="frmEnviar">
+        <form asp-action="Guardar" method="post" id="frmEnviar">
 
             <div class="form-group">
                 <label asp-for="iidespecilidad"></label>
-                <input asp-for="iidespecilidad" class="form form-control" />
+                <input asp-for="iidespecilidad" class="form form-control" readonly/>
                 <span asp-validation-for="iidespecilidad" class="text-danger"></span>
             </div>
 

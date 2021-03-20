@@ -53,27 +53,54 @@ namespace MiPrimeraAppNetCore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Agregar(EspecialidadCLS oEspecialidadCLS)
+        /*
+         * en le guardar el iidespecilidad es 0
+         * en le editar el id tiene un valor porque lo trae de la vista(index)
+         */
+        public IActionResult Guardar(EspecialidadCLS oEspecialidadCLS)
         {
+            string nombreVista = "";
+
+
             try
             {
+                //corregiendo el error de la vista guardar
+                if (oEspecialidadCLS.iidespecilidad == 0) nombreVista = "Agregar";
+                else nombreVista = "Editar";
+
                 using (BDHospitalContext db = new BDHospitalContext())
                 {
                     //si no es valido
                     if (!ModelState.IsValid)
                     {
-                        //para conservar los datos que el usuario escribio
-                        return View(oEspecialidadCLS);
+                        //para conservar los datos que el usuario escribio y la vista
+                        return View(nombreVista,oEspecialidadCLS);
                     }
                     else
                     {
-                        //instacia del modelo y guarda los datos
-                        Especialidad objeto = new Especialidad();
-                        objeto.Nombre = oEspecialidadCLS.nombre;
-                        objeto.Descripcion = oEspecialidadCLS.descripcion;
-                        objeto.Bhabilitado = 1;
-                        db.Especialidad.Add(objeto);
-                        db.SaveChanges();
+                        //para Guardar
+                        if (oEspecialidadCLS.iidespecilidad==0)
+                        {
+
+                            //instacia del modelo y guarda los datos
+                            Especialidad objeto = new Especialidad();
+                            objeto.Nombre = oEspecialidadCLS.nombre;
+                            objeto.Descripcion = oEspecialidadCLS.descripcion;
+                            objeto.Bhabilitado = 1;
+                            db.Especialidad.Add(objeto);
+                            db.SaveChanges();
+                        }
+                        //editar
+                        else
+                        {
+                            Especialidad objeto = db.Especialidad
+                                                  .Where(p => p.Iidespecialidad == oEspecialidadCLS.iidespecilidad)
+                                                  .First();
+                            objeto.Nombre = oEspecialidadCLS.nombre;
+                            objeto.Descripcion = oEspecialidadCLS.descripcion;
+                            db.SaveChanges();
+
+                        }
                     }
 
                 }
@@ -81,8 +108,8 @@ namespace MiPrimeraAppNetCore.Controllers
             catch (Exception)
             {
 
-                //para conservar los datos que el usuario escribio
-                return View(oEspecialidadCLS);
+                //para conservar los datos que el usuario escribio y consevar la vista
+                return View(nombreVista,oEspecialidadCLS);
             }
 
             return RedirectToAction("Index");
@@ -116,6 +143,8 @@ namespace MiPrimeraAppNetCore.Controllers
             return RedirectToAction("Index");
         }
 
+
+        //recupera la informacion
         public IActionResult Editar(int id) 
         {
             EspecialidadCLS oEspecialidadCLS = new EspecialidadCLS();
