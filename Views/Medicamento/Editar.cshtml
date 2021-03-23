@@ -13,11 +13,11 @@
 
     <div class="col-md-6">
 
-        <form asp-action="Agregar" asp-controller="Medicamento" id="frmEnviar" method="post">
+        <form asp-action="Guardar" asp-controller="Medicamento" id="frmEnviar" method="post">
 
             <div>
                 <label asp-for="iidMedicamento"></label>
-                <input type="text" class="form form-control" asp-for="iidMedicamento" />
+                <input type="text" class="form form-control" asp-for="iidMedicamento" readonly />
                 <span asp-validation-for="iidMedicamento" class="text-danger"></span>
             </div>
 

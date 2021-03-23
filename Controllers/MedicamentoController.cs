@@ -91,6 +91,7 @@ namespace MiPrimeraAppNetCore.Controllers
 
             using (BDHospitalContext bd = new BDHospitalContext())
             {
+                //regresa el objeto que tenga todos los datos que da el id
                 oMedicamentoCLS = (from medicamento in bd.Medicamento
                                    where medicamento.Iidmedicamento == id
                                    select new MedicamentoCLS
@@ -110,32 +111,56 @@ namespace MiPrimeraAppNetCore.Controllers
 
 
         [HttpPost]
-        public IActionResult Agregar(MedicamentoCLS oMedicamentoCLS) 
+        public IActionResult Guardar (MedicamentoCLS oMedicamentoCLS) 
         {
+            string nombreVista = "";
+
             try
             {
                 using (BDHospitalContext bd = new BDHospitalContext())
                 {
+                    if (oMedicamentoCLS.iidMedicamento == 0) nombreVista = "Agregar";
+                    else nombreVista = "Editar";
+
                     //si no son validos los datos se queda en la vista
                     if (!ModelState.IsValid)
                     {
                         //variable que iguala al metodo de la forma farmaceutica
                         ViewBag.listaFormaFarmaceutica = listarFormaFarmaceutica();
-                        return View(oMedicamentoCLS);
+                        return View(nombreVista, oMedicamentoCLS);
                     }
                     else
                     {
-                        Medicamento medicamento = new Medicamento();
-                        medicamento.Nombre = oMedicamentoCLS.nombre;
-                        medicamento.Concentracion = oMedicamentoCLS.concentracion;
-                        medicamento.Iidformafarmaceutica = oMedicamentoCLS.iidFormaFarmaceutica;
-                        medicamento.Precio = oMedicamentoCLS.precio;
-                        medicamento.Stock = oMedicamentoCLS.stock;
-                        medicamento.Presentacion = oMedicamentoCLS.presentacion;
-                        medicamento.Bhabilitado = 1;
-                        bd.Medicamento.Add(medicamento);
-                        bd.SaveChanges();
+                        //verfica si la id es 0 es guardar
+                        if (oMedicamentoCLS.iidMedicamento == 0)
+                        {
+                            Medicamento medicamento = new Medicamento();
+                            medicamento.Nombre = oMedicamentoCLS.nombre;
+                            medicamento.Concentracion = oMedicamentoCLS.concentracion;
+                            medicamento.Iidformafarmaceutica = oMedicamentoCLS.iidFormaFarmaceutica;
+                            medicamento.Precio = oMedicamentoCLS.precio;
+                            medicamento.Stock = oMedicamentoCLS.stock;
+                            medicamento.Presentacion = oMedicamentoCLS.presentacion;
+                            medicamento.Bhabilitado = 1;
+                            bd.Medicamento.Add(medicamento);
+                            bd.SaveChanges();
+                        }
+                        else
+                        {
+                            //verifica si el id tiene un valor edita
+                            Medicamento medicamento = bd.Medicamento.
+                                Where(p => p.Iidmedicamento == oMedicamentoCLS.iidMedicamento)
+                                .First();
 
+                            //modifica los datos que fueron recibidos en el modelo
+                            medicamento.Nombre = oMedicamentoCLS.nombre;
+                            medicamento.Concentracion = oMedicamentoCLS.concentracion;
+                            medicamento.Iidformafarmaceutica = oMedicamentoCLS.iidFormaFarmaceutica;
+                            medicamento.Precio = oMedicamentoCLS.precio;
+                            medicamento.Stock = oMedicamentoCLS.stock;
+                            medicamento.Presentacion = oMedicamentoCLS.presentacion;
+                            bd.SaveChanges();
+                        }
 
                     }
 
@@ -145,7 +170,7 @@ namespace MiPrimeraAppNetCore.Controllers
             catch (Exception)
             {
 
-                throw;
+                return View(nombreVista, oMedicamentoCLS);
             }
 
             return RedirectToAction("Index");
