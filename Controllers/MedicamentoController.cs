@@ -176,6 +176,22 @@ namespace MiPrimeraAppNetCore.Controllers
             return RedirectToAction("Index");
         
         }
+
+        [HttpPost]
+        //eliminacion fisica
+        public IActionResult Eliminar(int iidMedicamento)
+        {
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                Medicamento medicamento = bd.Medicamento.Where(p => p.Iidmedicamento == iidMedicamento).First();
+                //medicamento.Bhabilitado = 0;
+                bd.Medicamento.Remove(medicamento);
+                bd.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+
+        }
     }
 
 }

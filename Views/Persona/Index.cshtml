@@ -8,7 +8,7 @@
 <a class="btn btn-outline-primary" asp-action="Agregar" asp-controller="Persona">Agregar Persona</a>
 <hr />
 
-<form id="frmEnviar" asp-controller="Persona" asp-action="Index" 
+<form id="frmEnviar" asp-controller="Persona" asp-action="Index"
       method="post" style="display:grid; grid-template-columns: 1fr 2fr 1fr 1fr"
       class="mr-2">
 
@@ -16,17 +16,18 @@
     @Html.DropDownList("iidSexo", listaSexo, new { @class = "form form-control" })
     <input type="submit" class="btn btn-outline-primary" value="Buscar" />
     <input type="button" class="btn btn-outline-warning" value="Limpiar"
-           onclick="Limpiar()"/>
+           onclick="Limpiar()" />
 </form>
 
 <h1 class="text-center">listado de personas</h1>
 <table class="table table-dark">
     <thead class="bg-primary">
         <tr>
-            <th>@Html.DisplayNameFor(model=>model.iidPersona)</th>
+            <th>@Html.DisplayNameFor(model => model.iidPersona)</th>
             <th>@Html.DisplayNameFor(model => model.nombreCompleto)</th>
             <th>@Html.DisplayNameFor(model => model.email)</th>
-            <th>@Html.DisplayNameFor(model=>model.nombreSexo)</th>
+            <th>@Html.DisplayNameFor(model => model.nombreSexo)</th>
+            <th>Operaciones</th>
         </tr>
     </thead>
     <tbody>
@@ -37,6 +38,13 @@
                 <td>@item.nombreCompleto</td>
                 <td>@item.email</td>
                 <td>@item.nombreSexo</td>
+                <td>
+                    <!--Eliminar-->
+                    <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                       onclick="EliminarPersona(@item.iidPersona)">
+                    </i>
+
+                </td>
             </tr>
 
         }
@@ -45,9 +53,33 @@
 
 </table>
 
+<!--formulario para eliminar-->
+<form asp-action="Eliminar" asp-controller="Persona"
+      method="post" id="frmEnviarEliminar">
+    <input type="hidden" id="txtIdPersonaEliminar" name="iidPersona" />
+</form>
+
+<script src="~/js/sweetAlert.js"></script>
+<script src="~/js/generic.js"></script>
+
 <script>
     function Limpiar() {
         document.getElementById("iidSexo").value = "";
         document.getElementById("frmEnviar").submit();
+    }
+
+    function EliminarPersona(idPersona) {
+        //se iguala con el formulario y el contralor
+        document.getElementById("txtIdPersonaEliminar").value = idPersona;
+
+        mostrarModal().then(res => {
+            //si presiona aceptar
+            if (res.value) {
+                var frmEnviarEliminar = document.getElementById("frmEnviarEliminar");
+                frmEnviarEliminar.submit();
+
+            }
+        })
+
     }
 </script>

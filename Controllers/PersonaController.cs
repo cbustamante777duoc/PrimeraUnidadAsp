@@ -124,6 +124,20 @@ namespace MiPrimeraAppNetCore.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult Eliminar(int iidPersona) 
+        {
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                Persona persona = bd.Persona.Where(p => p.Iidpersona == iidPersona).First();
+                persona.Bhabilitado = 0;
+                bd.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+            
+        }
+
 
     }
 }

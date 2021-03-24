@@ -17,72 +17,97 @@
 
 <p>
 
-<table class="table table-dark">
-    <thead class="bg-primary">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.iidMedicamento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.precio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.stock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.nombreFormaFarmaceutica)
-            </th>
-            <td>
-                Operaciones
-            </td>
-            
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.iidMedicamento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.nombreFormaFarmaceutica)
-            </td>
+    <table class="table table-dark">
+        <thead class="bg-primary">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.iidMedicamento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.precio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.stock)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nombreFormaFarmaceutica)
+                </th>
+                <td>
+                    Operaciones
+                </td>
 
-            <td>
-                <!--boton eliminar-->
-                <i class="fa fa-trash btn btn-danger" aria-hidden="true"
-                   onclick="EliminarMedicamento(@item.iidMedicamento)">
-                </i>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.iidMedicamento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.precio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.stock)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nombreFormaFarmaceutica)
+                    </td>
 
-                <!--boton editar-->
-                <a class="fa fa-edit btn btn-primary" aria-hidden="true"
-                   asp-controller="Medicamento" asp-action="Editar"
-                   asp-route-id="@item.iidMedicamento">
+                    <td>
+                        <!--boton eliminar-->
+                        <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                           onclick="EliminarMedicamento(@item.iidMedicamento)">
+                        </i>
 
-                </a>
-            </td>
-           
-        </tr>
-}
-    </tbody>
-</table>
+                        <!--boton editar-->
+                        <a class="fa fa-edit btn btn-primary" aria-hidden="true"
+                           asp-controller="Medicamento" asp-action="Editar"
+                           asp-route-id="@item.iidMedicamento">
 
-<script>
-    var iidFormaFarmaceutica = document.getElementById("iidFormaFarmaceutica");
-    iidFormaFarmaceutica.onchange = function () {
-        document.getElementById("frmEnviar").submit();
-    }
+                        </a>
+                    </td>
 
-</script>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!--formulario para eliminar-->
+    <form asp-action="Eliminar" asp-controller="Medicamento"
+          method="post" id="frmEnviarEliminar">
+        <input type="hidden" id="txtIdMedicamento" name="iidMedicamento" />
+    </form>
+
+
+    <!--importacion de los scripts-->
+    <script src="~/js/sweetAlert.js"></script>
+    <script src="~/js/generic.js"></script>
+
+    <script>
+        //realizar la busqueda por combobox
+        var iidFormaFarmaceutica = document.getElementById("iidFormaFarmaceutica");
+        iidFormaFarmaceutica.onchange = function () {
+            document.getElementById("frmEnviar").submit();
+        }
+
+        //eliminacion
+        function EliminarMedicamento(iidMedicamento) {
+            document.getElementById("txtIdMedicamento").value = iidMedicamento;
+            mostrarModal().then(res => {
+                if (res.value) {
+                    var frmEnviarEliminar = document.getElementById("frmEnviarEliminar");
+                    frmEnviarEliminar.submit();
+                }
+            })
+
+        }
+
+    </script>
