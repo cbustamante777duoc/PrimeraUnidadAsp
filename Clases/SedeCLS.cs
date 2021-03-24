@@ -12,8 +12,10 @@ namespace MiPrimeraAppNetCore.Clases
         public int iidSede { get; set; }
 
         [Display(Name = "Nombre de la sede")]
+        [Required(ErrorMessage ="ingrese el nombre de la sede")]
         public string nombreSede { get; set; }
         [Display(Name = "Direccion")]
+        [Required(ErrorMessage = "ingrese el direcion de la sede")]
         public string direcion { get; set; }
     }
 }

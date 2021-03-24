@@ -1,0 +1,51 @@
+﻿@model MiPrimeraAppNetCore.Clases.SedeCLS
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<h1>Editar Sede</h1>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Guardar" asp-controller="Sede" id="frmEnviar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="iidSede" class="control-label"></label>
+                <input asp-for="iidSede" class="form-control" readonly/>
+                <span asp-validation-for="iidSede" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="nombreSede" class="control-label"></label>
+                <input asp-for="nombreSede" class="form-control" />
+                <span asp-validation-for="nombreSede" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="direcion" class="control-label"></label>
+                <input asp-for="direcion" class="form-control" />
+                <span asp-validation-for="direcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="button" value="Enviar" class="btn btn-primary" onclick="abrir()"/>
+                <a asp-action="Index" class="btn btn-danger">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/sweetAlert.js"></script>
+<script src="~/js/generic.js"></script>
+
+<script>
+    function abrir() {
+        mostrarModal().then(res => {
+            if (res.value) {
+                var frmEnviar = document.getElementById("frmEnviar");
+                frmEnviar.submit();
+            }
+        })
+
+    }
+
+</script>

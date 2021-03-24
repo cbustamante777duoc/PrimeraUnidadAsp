@@ -58,5 +58,57 @@ namespace MiPrimeraAppNetCore.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        public IActionResult Editar(int id) 
+        {
+            SedeCLS sedeCLS = new SedeCLS();
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                sedeCLS = (from sede in bd.Sede
+                           where sede.Iidsede == id
+                           select new SedeCLS
+                           {
+                               iidSede = sede.Iidsede,
+                               nombreSede = sede.Nombre,
+                               direcion = sede.Direccion
+                           }).First();
+
+            }
+
+            return View(sedeCLS);
+        }
+
+        [HttpPost]
+        public IActionResult Guardar(SedeCLS oSedeCLS) 
+        {
+            string nombreVista = "";
+            if (oSedeCLS.iidSede == 0) nombreVista = "Agregar";
+            else nombreVista = "Editar";
+
+            if (!ModelState.IsValid)
+            {
+                return View(nombreVista, oSedeCLS);
+            }
+            else
+            {
+                using (BDHospitalContext bd = new BDHospitalContext())
+                {
+                    if (oSedeCLS.iidSede !=0)
+                    {
+                        Sede sede = bd.Sede.Where(p => p.Iidsede == oSedeCLS.iidSede)
+                                            .First();
+                        sede.Nombre = oSedeCLS.nombreSede;
+                        sede.Direccion = oSedeCLS.direcion;
+                        bd.SaveChanges();
+
+                    }
+
+                }
+                //editar
+
+            }
+            return RedirectToAction("Index");
+        
+        }
     }
 }
