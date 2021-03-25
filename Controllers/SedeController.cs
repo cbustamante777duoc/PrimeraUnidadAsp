@@ -58,7 +58,8 @@ namespace MiPrimeraAppNetCore.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        
+        //recupera la vista con los datos
         public IActionResult Editar(int id) 
         {
             SedeCLS sedeCLS = new SedeCLS();

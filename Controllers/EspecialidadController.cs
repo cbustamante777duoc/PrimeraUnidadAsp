@@ -60,7 +60,7 @@ namespace MiPrimeraAppNetCore.Controllers
         public IActionResult Guardar(EspecialidadCLS oEspecialidadCLS)
         {
             string nombreVista = "";
-
+            int numeroVeces = 0;
 
             try
             {
@@ -70,9 +70,19 @@ namespace MiPrimeraAppNetCore.Controllers
 
                 using (BDHospitalContext db = new BDHospitalContext())
                 {
-                    //si no es valido
-                    if (!ModelState.IsValid)
+                    //validacion para ir a al guardar
+                    if(oEspecialidadCLS.iidespecilidad==0)
+                    //analizo cuantas veces se repite el nombre de especialidad en la bd
+                    //se se pasan ambas a mayuscula
+                    numeroVeces = db.Especialidad
+                        .Where(p => p.Nombre.ToUpper() == oEspecialidadCLS.nombre.ToUpper())
+                        .Count();
+
+                    //si no es valido el modelo o se repite los valores en la bd
+                    if (!ModelState.IsValid || numeroVeces >=1)
                     {
+                        if (numeroVeces >= 1) 
+                            oEspecialidadCLS.mensajeError = "el nombre de la especialida ya existe";
                         //para conservar los datos que el usuario escribio y la vista
                         return View(nombreVista,oEspecialidadCLS);
                     }

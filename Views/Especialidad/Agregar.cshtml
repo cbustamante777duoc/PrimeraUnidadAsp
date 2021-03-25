@@ -19,6 +19,11 @@
                 <label asp-for="nombre"></label>
                 <input asp-for="nombre" class="form form-control" />
                 <span asp-validation-for="nombre" class="text-danger"></span>
+                <!--validacion si se repite el valor de nombre en la bd-->
+                @if (Model!=null && Model.mensajeError != null && Model.mensajeError != "") 
+                {
+                    <p class="text-danger">El nombre de la especialidad ya existe completamente</p>
+                }
             </div>
 
             <div class="form-group">
