@@ -8,7 +8,7 @@ namespace MiPrimeraAppNetCore.Clases
 {
     public class TipoUsuarioCLS
     {
-        [Display(Name ="id tipo usuario")]
+        [Display(Name = "id tipo usuario")]
         public int iidTipoUsuario { get; set; }
 
         [Required(ErrorMessage = "ingrese nombre del  tipo usuario")]
@@ -19,6 +19,12 @@ namespace MiPrimeraAppNetCore.Clases
         [Display(Name = "descripcion")]
         public string descripcion { get; set; }
 
-        
+
+        //validacion para los valores repetidos en la bd
+        public string mensajeErrorNombre { get; set; }
+
+        public string mensajeErrorDescripcion { get; set; }
+
+
     }
 }

@@ -32,7 +32,7 @@ namespace MiPrimeraAppNetCore.Controllers
                     ViewBag.IidTipoUsuario = 0;
                 }
                 //ahora se hace el filtrado
-                else 
+                else
                 {
                     //filtra por cada condicion
                     if (oTipoUsuarioCLS.nombre != null)
@@ -66,24 +66,56 @@ namespace MiPrimeraAppNetCore.Controllers
             return View(listaTipoUsuario);
         }
 
-        public IActionResult Agregar() 
+        public IActionResult Agregar()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Agregar(TipoUsuarioCLS oTipoUsuarioCLS)
+        public IActionResult Guardar(TipoUsuarioCLS oTipoUsuarioCLS)
         {
+            //se pone a fuera del try para que el nombrevista llege hasta el catch
+                string nombreVista = "";
+                int nvecesNombre = 0;
+                int nvecesDescripcion = 0;
             try
             {
-                if (!ModelState.IsValid)
+                //validaciones al tipo vista
+                if (oTipoUsuarioCLS.iidTipoUsuario == 0) nombreVista = "Agregar";
+                else nombreVista = "Editar";
+
+                using (BDHospitalContext bd = new BDHospitalContext())
                 {
-                    return View(oTipoUsuarioCLS);
-                }
-                else
-                {
-                    using (BDHospitalContext bd = new BDHospitalContext())
+                    //en el caso de agregar
+                    if (oTipoUsuarioCLS.iidTipoUsuario==0)
                     {
+                        //validacion de repeticiones en la bd nombre
+                        nvecesNombre = bd.TipoUsuario
+                            .Where(p => p.Nombre.ToUpper().Trim() == 
+                            oTipoUsuarioCLS.nombre.ToUpper().Trim())
+                            .Count();
+
+                        //validacion de repeticiones en la bd descripcion
+                        nvecesDescripcion = bd.TipoUsuario
+                            .Where(p => p.Descripcion.ToUpper().Trim() ==
+                            oTipoUsuarioCLS.descripcion.ToUpper().Trim())
+                            .Count();
+                    }
+
+                    if (!ModelState.IsValid || nvecesNombre>=1 || nvecesDescripcion>=1)
+                    {
+                        //mensaje de error
+                        if (nvecesNombre >= 1)
+                            oTipoUsuarioCLS.mensajeErrorNombre = "el nombre ya existe en la bd";
+
+                        if (nvecesDescripcion >= 1)
+                            oTipoUsuarioCLS.mensajeErrorDescripcion = "la descripcion ya existe en la bd";
+
+                        return View(nombreVista, oTipoUsuarioCLS);
+                    }
+                    else
+                    {
+
 
                         TipoUsuario tipoUsuario = new TipoUsuario();
                         tipoUsuario.Nombre = oTipoUsuarioCLS.nombre;
@@ -95,11 +127,12 @@ namespace MiPrimeraAppNetCore.Controllers
                     }
 
                 }
+
             }
             catch (Exception)
             {
 
-                return View(oTipoUsuarioCLS);
+                return View(nombreVista, oTipoUsuarioCLS);
             }
 
             return RedirectToAction("Index");
@@ -107,7 +140,7 @@ namespace MiPrimeraAppNetCore.Controllers
 
         [HttpPost]
         //eliminacion fisica 
-        public IActionResult Eliminar(int iidTipoUsuario) 
+        public IActionResult Eliminar(int iidTipoUsuario)
         {
             using (BDHospitalContext bd = new BDHospitalContext())
             {
