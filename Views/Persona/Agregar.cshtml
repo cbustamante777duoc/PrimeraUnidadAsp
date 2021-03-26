@@ -11,9 +11,13 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Agregar" method="post" id="frmEnviar">
+        <form asp-action="Guardar" method="post" id="frmEnviar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           @if (Model != null && Model.mensajeError != "") 
+           { 
+             <p class="text-danger">@Model.mensajeError</p>
            
+           }
             <div class="form-group">
                 <label asp-for="nombre" class="control-label"></label>
                 <input asp-for="nombre" class="form-control" />

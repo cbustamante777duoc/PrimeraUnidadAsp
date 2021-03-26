@@ -12,7 +12,7 @@ namespace MiPrimeraAppNetCore.Controllers
     public class PersonaController : Controller
     {
 
-        public void LlenarSexo() 
+        public void LlenarSexo()
         {
             //para llenar el comboBox se necesita SelectListItem
             List<SelectListItem> listaSexo = new List<SelectListItem>();
@@ -39,10 +39,10 @@ namespace MiPrimeraAppNetCore.Controllers
         {
             List<PersonaCLS> listaPersona = new List<PersonaCLS>();
             LlenarSexo();
-            using (BDHospitalContext db = new BDHospitalContext()) 
+            using (BDHospitalContext db = new BDHospitalContext())
             {
                 //si la lista esta vacia
-                if (oPersonaCLS.iidSexo == 0 || oPersonaCLS.iidSexo==null)
+                if (oPersonaCLS.iidSexo == 0 || oPersonaCLS.iidSexo == null)
                 {
                     listaPersona = (from persona in db.Persona
                                     join sexo in db.Sexo
@@ -74,29 +74,55 @@ namespace MiPrimeraAppNetCore.Controllers
                                     }).ToList();
 
                 }
-           }
-             return View(listaPersona);
+            }
+            return View(listaPersona);
         }
 
-        public IActionResult Agregar() 
+        public IActionResult Agregar()
         {
             LlenarSexo();
             return View();
         }
 
         [HttpPost]
-        public IActionResult Agregar(PersonaCLS oPersonaCLS)
+        public IActionResult Guardar(PersonaCLS oPersonaCLS)
         {
+            //llenado del combobox
             LlenarSexo();
+
+            string nombreVista = "";
+            int numeroVeces = 0;
+
+            //validacion de las vista
+            if (oPersonaCLS.iidPersona == 0) nombreVista = "Agregar";
+            else nombreVista = "Editar";
+
             try
             {
-                if (!ModelState.IsValid)
+                using (BDHospitalContext bd = new BDHospitalContext())
                 {
-                    return View(oPersonaCLS);
-                }
-                else
-                {
-                    using (BDHospitalContext bd = new BDHospitalContext())
+                    //validacion por repeticion en la bd
+                    //para ellos se ven los espacios vacios y pasarlo a mayuscula
+                    //Agregar
+                    oPersonaCLS.nombreCompleto = oPersonaCLS.nombre.Trim().ToUpper() + " " + oPersonaCLS.apPaterno.Trim().ToUpper() 
+                        + " " + oPersonaCLS.apMaterno.Trim().ToUpper();
+                    if (oPersonaCLS.iidPersona==0)
+                    {
+                        numeroVeces = bd.Persona
+                            .Where(p => p.Nombre.Trim().ToUpper() + " " + p.Appaterno.Trim().ToUpper() + " " 
+                            + p.Apmaterno.Trim().ToUpper() == oPersonaCLS.nombreCompleto)
+                            .Count();
+
+                    }
+
+                    //validacion del modelo o numero de veces que se repite en la bd
+                    if (!ModelState.IsValid || numeroVeces>=0)
+                    {
+                        if (numeroVeces >= 1) oPersonaCLS.mensajeError = "la persona ya existe";
+                        return View(nombreVista, oPersonaCLS);
+                    }
+
+                    else
                     {
                         Persona persona = new Persona();
                         persona.Nombre = oPersonaCLS.nombre;
@@ -104,8 +130,8 @@ namespace MiPrimeraAppNetCore.Controllers
                         persona.Apmaterno = oPersonaCLS.apMaterno;
                         persona.Telefonofijo = oPersonaCLS.telefonoFijo;
                         persona.Telefonocelular = oPersonaCLS.telefonoCelular;
-                        persona.Fechanacimiento= oPersonaCLS.fechaNacimiento;
-                        persona.Email= oPersonaCLS.email;
+                        persona.Fechanacimiento = oPersonaCLS.fechaNacimiento;
+                        persona.Email = oPersonaCLS.email;
                         persona.Iidsexo = oPersonaCLS.iidSexo;
                         persona.Bhabilitado = 1;
                         bd.Add(persona);
@@ -114,29 +140,31 @@ namespace MiPrimeraAppNetCore.Controllers
 
                     }
                 }
-                
+
+
             }
             catch (Exception)
             {
 
-                return View(oPersonaCLS);
+                return View(nombreVista, oPersonaCLS);
             }
+
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult Eliminar(int iidPersona) 
+        public IActionResult Eliminar(int iidPersona)
         {
             using (BDHospitalContext bd = new BDHospitalContext())
             {
                 Persona persona = bd.Persona.Where(p => p.Iidpersona == iidPersona).First();
-               
+
                 persona.Bhabilitado = 0;
                 bd.SaveChanges();
             }
 
             return RedirectToAction("Index");
-            
+
         }
 
 
