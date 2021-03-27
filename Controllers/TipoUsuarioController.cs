@@ -87,11 +87,11 @@ namespace MiPrimeraAppNetCore.Controllers
                 using (BDHospitalContext bd = new BDHospitalContext())
                 {
                     //en el caso de agregar
-                    if (oTipoUsuarioCLS.iidTipoUsuario==0)
+                    if (oTipoUsuarioCLS.iidTipoUsuario == 0)
                     {
                         //validacion de repeticiones en la bd nombre
                         nvecesNombre = bd.TipoUsuario
-                            .Where(p => p.Nombre.ToUpper().Trim() == 
+                            .Where(p => p.Nombre.ToUpper().Trim() ==
                             oTipoUsuarioCLS.nombre.ToUpper().Trim())
                             .Count();
 
@@ -100,6 +100,22 @@ namespace MiPrimeraAppNetCore.Controllers
                             .Where(p => p.Descripcion.ToUpper().Trim() ==
                             oTipoUsuarioCLS.descripcion.ToUpper().Trim())
                             .Count();
+                    }
+                    else 
+                    {
+                        //validacion de repeticiones en la bd nombre
+                        nvecesNombre = bd.TipoUsuario
+                            .Where(p => p.Nombre.ToUpper().Trim() ==
+                            oTipoUsuarioCLS.nombre.ToUpper().Trim())
+                            .Count();
+
+                        //validacion de repeticiones en la bd descripcion
+                        nvecesDescripcion = bd.TipoUsuario
+                            .Where(p => p.Descripcion.ToUpper().Trim() ==
+                            oTipoUsuarioCLS.descripcion.ToUpper().Trim() &&
+                            p.Iidtipousuario != oTipoUsuarioCLS.iidTipoUsuario)
+                            .Count();
+
                     }
 
                     if (!ModelState.IsValid || nvecesNombre>=1 || nvecesDescripcion>=1)

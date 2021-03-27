@@ -70,13 +70,21 @@ namespace MiPrimeraAppNetCore.Controllers
 
                 using (BDHospitalContext db = new BDHospitalContext())
                 {
-                    //validacion para ir a al guardar
-                    if(oEspecialidadCLS.iidespecilidad==0)
-                    //analizo cuantas veces se repite el nombre de especialidad en la bd
-                    //se se pasan ambas a mayuscula
-                    numeroVeces = db.Especialidad
-                        .Where(p => p.Nombre.ToUpper().Trim() == oEspecialidadCLS.nombre.ToUpper().Trim())
-                        .Count();
+                    //validacion para ir a al GUARDAR
+                    if (oEspecialidadCLS.iidespecilidad == 0)
+                        //analizo cuantas veces se repite el nombre de especialidad en la bd
+                        //se se pasan ambas a mayuscula
+                        numeroVeces = db.Especialidad
+                            .Where(p => p.Nombre.ToUpper().Trim() == oEspecialidadCLS.nombre.ToUpper().Trim())
+                            .Count();
+                    else
+                        //validacion para el EDITAR
+                        numeroVeces = db.Especialidad
+                            .Where(p => p.Nombre.ToUpper().Trim() ==
+                            oEspecialidadCLS.nombre.ToUpper().Trim() && 
+                            p.Iidespecialidad != oEspecialidadCLS.iidespecilidad )
+                            .Count(); 
+                            
 
                     //si no es valido el modelo o se repite los valores en la bd
                     if (!ModelState.IsValid || numeroVeces >=1)

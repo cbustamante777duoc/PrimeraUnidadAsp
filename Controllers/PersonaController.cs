@@ -106,12 +106,22 @@ namespace MiPrimeraAppNetCore.Controllers
                     //Agregar
                     oPersonaCLS.nombreCompleto = oPersonaCLS.nombre.Trim().ToUpper() + " " + oPersonaCLS.apPaterno.Trim().ToUpper() 
                         + " " + oPersonaCLS.apMaterno.Trim().ToUpper();
-                    if (oPersonaCLS.iidPersona==0)
+                    if (oPersonaCLS.iidPersona == 0)
                     {
                         numeroVeces = bd.Persona
-                            .Where(p => p.Nombre.Trim().ToUpper() + " " + p.Appaterno.Trim().ToUpper() + " " 
+                            .Where(p => p.Nombre.Trim().ToUpper() + " " + p.Appaterno.Trim().ToUpper() + " "
                             + p.Apmaterno.Trim().ToUpper() == oPersonaCLS.nombreCompleto)
                             .Count();
+
+                    }
+                    else
+                    {
+                        //VALIDACION PARA EDITAR QUE NO SE REPITA EN BD
+                        bd.Persona
+                           .Where(p => p.Nombre.Trim().ToUpper() + " " + p.Appaterno.Trim().ToUpper() + " "
+                           + p.Apmaterno.Trim().ToUpper() == oPersonaCLS.nombreCompleto
+                           && p.Iidpersona != oPersonaCLS.iidPersona
+                           ).Count();
 
                     }
 
