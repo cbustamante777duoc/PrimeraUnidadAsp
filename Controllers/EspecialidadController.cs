@@ -96,7 +96,7 @@ namespace MiPrimeraAppNetCore.Controllers
                     }
                     else
                     {
-                        //para Guardar
+                        //GUARDAR EN BD
                         if (oEspecialidadCLS.iidespecilidad==0)
                         {
 
@@ -108,7 +108,7 @@ namespace MiPrimeraAppNetCore.Controllers
                             db.Especialidad.Add(objeto);
                             db.SaveChanges();
                         }
-                        //editar
+                        //EDITAR EN BD
                         else
                         {
                             Especialidad objeto = db.Especialidad

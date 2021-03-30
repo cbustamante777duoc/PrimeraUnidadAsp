@@ -24,6 +24,8 @@ namespace MiPrimeraAppNetCore.Clases
         [MinLength(3,ErrorMessage = "la logitud minima es de 3 caracteres")]
         [MaxLength(100, ErrorMessage = "la logitud maxima de 100 caracteres")]
         public string controlador { get; set; }
+
+        public string mensajeError { get; set; }
     }
 }
  

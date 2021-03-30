@@ -65,47 +65,114 @@ namespace MiPrimeraAppNetCore.Controllers
 
         //guardar los datos
         [HttpPost]
-        public IActionResult Agregar(PaginaCLS oPaginaCLS) 
+        public IActionResult Guardar(PaginaCLS oPaginaCLS) 
         {
+            string nombreVista = "";
+            int nveces = 0;
+
             try
             {
-                using (BDHospitalContext bd = new BDHospitalContext())
-                {
-                    //si no ingresa datos el usuario
-                    if (!ModelState.IsValid)
+                if (oPaginaCLS.iidPagina == 0) nombreVista = "Agregar";
+                else nombreVista = "Editar";
+
+                    using (BDHospitalContext bd = new BDHospitalContext())
                     {
-                        //se queda en la misma pagina
-                        return View(oPaginaCLS);
-                    }
-                    else
-                    {
-                        //instancia del modelo
-                        Pagina pagina = new Pagina();
-                        //se igualan los atributos del modelo con la clase
-                        pagina.Mensaje = oPaginaCLS.mensaje;
-                        pagina.Controlador = oPaginaCLS.controlador;
-                        pagina.Accion = oPaginaCLS.accion;
-                        //solo los habilitados
-                        pagina.Bhabilitado = 1;
-                        //se guarda en base de datos el modelo
-                        bd.Pagina.Add(pagina);
-                        //se confirma y se guardan los cambios
-                        bd.SaveChanges();
+
+                        //validacion para el agregar
+                        if (oPaginaCLS.iidPagina==0)
+                        {
+                            nveces = bd.Pagina
+                            .Where(p => p.Mensaje.ToUpper().Trim() ==
+                            oPaginaCLS.mensaje.ToUpper().Trim())
+                            .Count();
+                            
+                        }
+                        else
+                        {
+                            //validacion para el modificar
+                            nveces = bd.Pagina
+                            .Where(p => p.Mensaje.ToUpper().Trim() ==
+                            oPaginaCLS.mensaje.ToUpper().Trim() &&
+                            p.Iidpagina != oPaginaCLS.iidPagina ) 
+                            .Count();
+                        }
+                        
+                        //si no ingresa datos el usuario
+                        if (!ModelState.IsValid || nveces>=1)
+                        {
+
+                        if (nveces >= 1) oPaginaCLS.mensajeError = 
+                                "ya existe el mensaje de la pagina ingresada";
+                            return View(nombreVista,oPaginaCLS);
+                        }
+                        else
+                        {
+                            //GUARDA LOS DATOS EN BD
+                            if (oPaginaCLS.iidPagina==0)
+                            {
+                                //instancia del modelo
+                                Pagina pagina = new Pagina();
+                                //se igualan los atributos del modelo con la clase
+                                pagina.Mensaje = oPaginaCLS.mensaje;
+                                pagina.Controlador = oPaginaCLS.controlador;
+                                pagina.Accion = oPaginaCLS.accion;
+                                //solo los habilitados
+                                pagina.Bhabilitado = 1;
+                                //se guarda en base de datos el modelo
+                                bd.Pagina.Add(pagina);
+                                //se confirma y se guardan los cambios
+                                bd.SaveChanges();
+
+                            }
+                            else
+                            {
+                                Pagina pagina = bd.Pagina
+                                  .Where(p => p.Iidpagina == oPaginaCLS.iidPagina)
+                                  .First();
+
+                                pagina.Mensaje = oPaginaCLS.mensaje;
+                                pagina.Controlador = oPaginaCLS.controlador;
+                                pagina.Accion = oPaginaCLS.controlador;
+                                bd.SaveChanges();
+                            }
+
+                        }
+
+
+
 
                     }
-
-
-                    
-
-                }
             }
             catch (Exception)
             {
                 //si hay un error se queda en la misma pagina
-                return View(oPaginaCLS);
+                return View(nombreVista, oPaginaCLS);
             }
             return RedirectToAction("Index");
         }
+
+            /**
+             * metodo que que rescapa todos los valores del modelo
+             */
+        public IActionResult Editar(int id) 
+        {
+            PaginaCLS oPaginaCLS = new PaginaCLS();
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                oPaginaCLS = (from pagina in bd.Pagina
+                              where pagina.Iidpagina == id
+                              select new PaginaCLS
+                              {
+                                  iidPagina = pagina.Iidpagina,
+                                  mensaje = pagina.Mensaje,
+                                  accion = pagina.Accion,
+                                  controlador = pagina.Controlador
+                              }).First();
+
+            }
+            return View(oPaginaCLS);
+        }
+
 
         [HttpPost]
         //eliminacion fisica
@@ -124,5 +191,6 @@ namespace MiPrimeraAppNetCore.Controllers
             return RedirectToAction("Index");
                
         }
+
     }
 }

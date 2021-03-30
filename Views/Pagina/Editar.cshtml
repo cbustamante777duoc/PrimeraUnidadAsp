@@ -1,4 +1,5 @@
-﻿@model MiPrimeraAppNetCore.Clases.PaginaCLS
+﻿
+@model MiPrimeraAppNetCore.Clases.PaginaCLS
 
 @{
     ViewData["Title"] = "Agregar";
@@ -13,7 +14,12 @@
     <div class="col-md-6">
         <form asp-action="Guardar" asp-controller="Pagina" id="frmEnviar" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!--borre el id porque no se usa-->
+            
+            <div class="form-group">
+                <label asp-for="iidPagina" class="control-label"></label>
+                <input asp-for="iidPagina" class="form-control" readonly />
+                <span asp-validation-for="iidPagina" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="mensaje" class="control-label"></label>
                 <input asp-for="mensaje" class="form-control" />
@@ -34,7 +40,7 @@
                 <span asp-validation-for="controlador" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="button" value="Guardar" class="btn btn-primary" onclick="Abrir()"/>
+                <input type="button" value="Guardar" class="btn btn-primary" onclick="Abrir()" />
                 <a asp-action="Index" class="btn btn-outline-danger">Regresar</a>
             </div>
         </form>

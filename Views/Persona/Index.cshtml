@@ -44,6 +44,14 @@
                        onclick="EliminarPersona(@item.iidPersona)">
                     </i>
 
+                    <!--boton editar-->
+                    <a class="fa fa-edit btn btn-primary" aria-hidden="true"
+                       asp-controller="Persona" asp-action="Editar"
+                       asp-route-id="@item.iidPersona">
+
+                    </a>
+
+
                 </td>
             </tr>
 

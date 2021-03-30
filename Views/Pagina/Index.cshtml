@@ -53,6 +53,13 @@
                 <i class="fa fa-trash btn btn-danger" aria-hidden="true"
                    onclick="EliminarPagina(@item.iidPagina)">
                 </i>
+
+                <!--boton editar-->
+                <a class="fa fa-edit btn btn-primary" aria-hidden="true"
+                   asp-controller="Pagina" asp-action="Editar"
+                   asp-route-id="@item.iidPagina">
+
+                </a>
             </td>
             
         </tr>

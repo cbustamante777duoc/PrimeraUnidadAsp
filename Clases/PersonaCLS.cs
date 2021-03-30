@@ -58,5 +58,7 @@ namespace MiPrimeraAppNetCore.Clases
 
 
         public string mensajeError { get; set; }
+
+        public string mensajeErrorCorreo { get; set; }
     }
 }

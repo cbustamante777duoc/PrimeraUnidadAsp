@@ -84,6 +84,35 @@ namespace MiPrimeraAppNetCore.Controllers
             return View();
         }
 
+        public IActionResult Editar(int id) 
+        {
+            LlenarSexo();
+            PersonaCLS oPersonaCLS = new PersonaCLS();
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                oPersonaCLS = (from persona in bd.Persona
+                               where persona.Iidpersona == id
+                               select new PersonaCLS
+                               {
+                                   nombre = persona.Nombre,
+                                   iidPersona = persona.Iidpersona,
+                                   apPaterno = persona.Appaterno,
+                                   apMaterno = persona.Apmaterno,
+                                   email = persona.Email,
+                                   //si es nula la fecha por la fecha actual
+                                   fechaNacimiento = persona.Fechanacimiento == null
+                                 ? DateTime.Now : persona.Fechanacimiento,
+                                   iidSexo = persona.Iidsexo,
+                                   telefonoCelular = persona.Telefonocelular,
+                                   telefonoFijo = persona.Telefonofijo
+
+                               }).First();
+
+
+            }
+            return View(oPersonaCLS);
+        }
+
         [HttpPost]
         public IActionResult Guardar(PersonaCLS oPersonaCLS)
         {
@@ -92,6 +121,7 @@ namespace MiPrimeraAppNetCore.Controllers
 
             string nombreVista = "";
             int numeroVeces = 0;
+            int nvecesCorreo = 0;
 
             //validacion de las vista
             if (oPersonaCLS.iidPersona == 0) nombreVista = "Agregar";
@@ -113,6 +143,11 @@ namespace MiPrimeraAppNetCore.Controllers
                             + p.Apmaterno.Trim().ToUpper() == oPersonaCLS.nombreCompleto)
                             .Count();
 
+                        //VALIDACION DE QUE EL CORREO NO SE REPITA
+                        nvecesCorreo = bd.Persona
+                           .Where(p => p.Email.Trim().ToUpper() == oPersonaCLS.email.Trim().ToUpper())
+                           .Count();
+
                     }
                     else
                     {
@@ -123,29 +158,58 @@ namespace MiPrimeraAppNetCore.Controllers
                            && p.Iidpersona != oPersonaCLS.iidPersona
                            ).Count();
 
+
+                        nvecesCorreo = bd.Persona
+                         .Where(p => p.Email.Trim().ToUpper() == oPersonaCLS.email.Trim().ToUpper() &&
+                         p.Iidpersona != oPersonaCLS.iidPersona)
+                         .Count();
                     }
 
                     //validacion del modelo o numero de veces que se repite en la bd
-                    if (!ModelState.IsValid || numeroVeces>=0)
+                    if (!ModelState.IsValid || numeroVeces>=1 || nvecesCorreo>=1)
                     {
                         if (numeroVeces >= 1) oPersonaCLS.mensajeError = "la persona ya existe";
+                        if (nvecesCorreo >= 1) oPersonaCLS.mensajeErrorCorreo = "El correo ya existe en la base de datos";
                         return View(nombreVista, oPersonaCLS);
                     }
 
                     else
                     {
-                        Persona persona = new Persona();
-                        persona.Nombre = oPersonaCLS.nombre;
-                        persona.Appaterno = oPersonaCLS.apPaterno;
-                        persona.Apmaterno = oPersonaCLS.apMaterno;
-                        persona.Telefonofijo = oPersonaCLS.telefonoFijo;
-                        persona.Telefonocelular = oPersonaCLS.telefonoCelular;
-                        persona.Fechanacimiento = oPersonaCLS.fechaNacimiento;
-                        persona.Email = oPersonaCLS.email;
-                        persona.Iidsexo = oPersonaCLS.iidSexo;
-                        persona.Bhabilitado = 1;
-                        bd.Add(persona);
-                        bd.SaveChanges();
+                        //GUARDAR EN BD
+                        if (oPersonaCLS.iidPersona==0)
+                        {
+
+                            Persona persona = new Persona();
+                            persona.Nombre = oPersonaCLS.nombre;
+                            persona.Appaterno = oPersonaCLS.apPaterno;
+                            persona.Apmaterno = oPersonaCLS.apMaterno;
+                            persona.Telefonofijo = oPersonaCLS.telefonoFijo;
+                            persona.Telefonocelular = oPersonaCLS.telefonoCelular;
+                            persona.Fechanacimiento = oPersonaCLS.fechaNacimiento;
+                            persona.Email = oPersonaCLS.email;
+                            persona.Iidsexo = oPersonaCLS.iidSexo;
+                            persona.Bhabilitado = 1;
+                            bd.Add(persona);
+                            bd.SaveChanges();
+                        }
+                        else 
+                        {
+                            //EDITAR EN BD
+                            Persona persona = bd.Persona
+                                .Where(p => p.Iidpersona == oPersonaCLS.iidPersona)
+                                .First();
+
+                            persona.Nombre = oPersonaCLS.nombre;
+                            persona.Appaterno = oPersonaCLS.apPaterno;
+                            persona.Apmaterno = oPersonaCLS.apMaterno;
+                            persona.Telefonofijo = oPersonaCLS.telefonoFijo;
+                            persona.Telefonocelular = oPersonaCLS.telefonoCelular;
+                            persona.Fechanacimiento = oPersonaCLS.fechaNacimiento;
+                            persona.Email = oPersonaCLS.email;
+                            persona.Iidsexo = oPersonaCLS.iidSexo;
+                            bd.SaveChanges();
+
+                        }
 
 
                     }
