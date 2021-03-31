@@ -20,8 +20,8 @@
 
 <h1 class="text-center">lista de especialidad</h1>
 
-<table class="table table-hover table-dark table-bordered">
-    <thead  >
+<table class="table" id="tabla">
+    <thead class="thead-dark" >
         <tr>
             <th>@Html.DisplayNameFor(model=>model.iidespecilidad)</th>
             <th>@Html.DisplayNameFor(model=>model.nombre)</th>
@@ -32,7 +32,7 @@
     <tbody>
         @foreach (EspecialidadCLS item in Model)
         {
-        <tr>
+        <tr class="text-dark">
             <td>@item.iidespecilidad</td>
             <td>@item.nombre</td>
             <td>@item.descripcion</td>
@@ -69,6 +69,14 @@
 
 <!--scripts-->
 <script>
+    // funcion table.js
+    window.onload = function () {
+        $(document).ready(function () {
+            $('#tabla').DataTable();
+        });
+
+    }
+
     function Limpiar() {
         //limpia el boton con el id nombre
         document.getElementById("nombre").value = "";

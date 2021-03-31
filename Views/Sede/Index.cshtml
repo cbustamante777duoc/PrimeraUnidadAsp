@@ -15,8 +15,8 @@
 
 <h1 class="text-center" >Listado de Sedes</h1>
 
-<table class="table table-dark">
-    <thead class="bg-primary">
+<table class="table" id="tabla">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.iidSede)
@@ -75,6 +75,15 @@
 <script src="~/js/generic.js"></script>
 
 <script>
+
+    // funcion table.js
+    window.onload = function () {
+        $(document).ready(function () {
+            $('#tabla').DataTable();
+        });
+
+    }
+
     function Buscar() {
         document.getElementById("frmEnviar").submit();
     }

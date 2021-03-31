@@ -12,7 +12,7 @@
 <form asp-controller="TipoUsuario" asp-action="Index">
     <input type="submit" value="Enviar" class="btn btn-outline-primary" />
     <a class="btn btn-outline-primary" asp-action="Agregar">Nuevo</a>
-    <table class="table">
+    <table class="table" id="tabla">
         <thead class="thead-dark">
             <tr>
                 <th>
@@ -77,16 +77,26 @@
     </table>
 </form>
 
-<form asp-action="Eliminar" asp-controller="TipoUsuario" 
+<form asp-action="Eliminar" asp-controller="TipoUsuario"
       method="post" id="frmEliminar">
 
     <input type="hidden" id="txtTipoUsu" name="iidTipoUsuario" />
 </form>
 
+<!--importacion de js-->
 <script src="~/js/sweetAlert.js"></script>
 <script src="~/js/generic.js"></script>
 
+<!--scripts-->
 <script>
+
+    // funcion table.js
+    window.onload = function () {
+        $(document).ready(function () {
+            $('#tabla').DataTable();
+        });
+
+    }
 
     function EliminarTipoUsuario(idTipoUsuario) {
 

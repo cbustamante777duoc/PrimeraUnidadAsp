@@ -14,8 +14,8 @@
 </form>
 
 <h1 class="text-center">listado Pagina</h1>
-<table class="table table-dark">
-    <thead class="bg-primary">
+<table class="table " id="tabla">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.iidPagina)
@@ -77,6 +77,15 @@
 <script src="~/js/generic.js"></script>
 
 <script>
+
+    // funcion table.js
+    window.onload = function () {
+        $(document).ready(function () {
+            $('#tabla').DataTable();
+        });
+
+    }
+
     function Limpiar() {
         document.getElementById("mensaje").value = "";
         document.getElementById("frmFormulario").submit();
