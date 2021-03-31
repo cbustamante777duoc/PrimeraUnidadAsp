@@ -3,13 +3,17 @@ using MiPrimeraAppNetCore.Clases;
 using MiPrimeraAppNetCore.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using OfficeOpenXml;
+
 
 namespace MiPrimeraAppNetCore.Controllers
 {
     public class EspecialidadController : Controller
     {
+        public static List<EspecialidadCLS> lista;
         public IActionResult Index(EspecialidadCLS oEspecialidadCLS)
         {
             List<EspecialidadCLS> ListaEspecialidad = new List<EspecialidadCLS>();
@@ -44,6 +48,8 @@ namespace MiPrimeraAppNetCore.Controllers
                 }
                 
             }
+            //guardo todo en la lista estatica
+            lista = ListaEspecialidad;
             return View(ListaEspecialidad);
         }
 
@@ -181,5 +187,71 @@ namespace MiPrimeraAppNetCore.Controllers
             return View(oEspecialidadCLS);
         
         }
+
+        //metodo que genera un array de bytes
+        public byte[] exportarExcelDatos<T>(string[] cabeceras, string[] nombrePropiedades, List<T> lista)
+        {
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                //uso de excel no comercial
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                using (ExcelPackage ep = new ExcelPackage())
+                {
+                    ep.Workbook.Worksheets.Add("Hoja");
+                    //hace referencia a la pagina de arriba
+                    ExcelWorksheet ew = ep.Workbook.Worksheets[0];
+
+                    for (int i = 0; i < cabeceras.Length; i++)
+                    {
+                        //llenado con las cabeceras
+                        ew.Cells[1, i + 1].Value = cabeceras[i];
+                        //definiendo el ancho
+                        ew.Column(i + 1).Width = 50;
+
+                    }
+                    int fila = 2;
+                    int columna = 1;
+
+                    foreach (object item in lista) 
+                    {
+                        //llenado del contenido del excel
+                        columna = 1;
+                        foreach (string propiedad in nombrePropiedades)
+                        {
+                            ew.Cells[fila, columna].Value =
+                                item.GetType().GetProperty(propiedad).GetValue(item).ToString();
+
+                            columna++;
+                        }
+
+                        fila++;
+                    }
+
+                    //excelPackage se guarda en memoryStream
+                    ep.SaveAs(ms);
+
+                    byte[] buffer = ms.ToArray();
+
+                    return buffer;
+                }
+            }
+
+        }
+
+        //metodo para descargar
+        public FileResult exportarExcel() 
+        {
+            //cabeceras para el excel(parte de arriba)
+            string[] cabeceras = { "Id Especialidad", "Nombre", "Descripcion" };
+            string[] nombrePropiedades = { "iidespecilidad", "nombre", "descripcion" };
+            byte[] buffer = exportarExcelDatos(cabeceras, nombrePropiedades, lista);
+
+            return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+          
+        }
+
+
     }
 }
