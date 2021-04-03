@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace MiPrimeraAppNetCore.Controllers
 {
-    public class SedeController : Controller
+    public class SedeController : BaseController
     {
+        public static List<SedeCLS> lista;
         public IActionResult Index(SedeCLS oSedeCLS)
         {
             List<SedeCLS> listaSede = new List<SedeCLS>();
@@ -43,6 +44,7 @@ namespace MiPrimeraAppNetCore.Controllers
                 
                 
             }
+            lista = listaSede;
             return View(listaSede);
         }
 
@@ -110,6 +112,25 @@ namespace MiPrimeraAppNetCore.Controllers
             }
             return RedirectToAction("Index");
         
+        }
+
+        //metodo para descargar
+        public FileResult Exportar(string[] nombrePropiedades, string tipoReporte)
+        {
+            //cabeceras para el excel(parte de arriba)
+            //string[] cabeceras = { "Id Especialidad", "Nombre", "Descripcion" };
+            //string[] nombrePropiedades = { "iidespecilidad", "nombre", "descripcion" };
+
+            if (tipoReporte == "Excel")
+            {
+
+                byte[] buffer = exportarExcelDatos(nombrePropiedades, lista);
+                return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            }
+
+            return null;
+
         }
     }
 }

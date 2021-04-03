@@ -6,10 +6,13 @@
     string nombreEspecialidad = ViewBag.nombreEspecialidad;
 }
 
-
+<!--BOTON AGREGAR Y BOTONES PARA EXPORTAR-->
 <a class="btn btn-dark" asp-action="Agregar" asp-controller="Especialidad">Agregar</a>
+<input type="button" value="exportar Excel" class="btn btn-dark"  onclick="ExportarExcel()"/>
+<input type="button" value="exportar word" class="btn btn-dark" onclick="ExportarWord()" />
+<input type="button" value="exportar PDF" class="btn btn-dark" onclick="ExportarPdf()" />
 
-
+<!--FORMULARIO PARA BUSCAR Y ELIMINAR-->
 <form asp-controller="Especialidad" asp-action="Index" method="post" class="mb-2"
       style="display:grid; grid-template-columns:1fr 2fr 1fr 1fr" id="frmFormulario">
     <label>Ingrese nombre especialidad</label>
@@ -19,44 +22,57 @@
 </form>
 
 <h1 class="text-center">lista de especialidad</h1>
+<!--FORMULARIO PARA EXPORTAR ADEMAS TIENE UNA TABLA-->
+<form asp-controller="Especialidad" asp-action="Exportar" id="frmReporte">
+    <table class="table" id="tabla">
+        @*<a asp-action="exportarExcel" asp-controller="Especialidad">Exportar Excel</a>*@
+        <thead class="thead-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.iidespecilidad)</th>
+                <th>@Html.DisplayNameFor(model => model.nombre)</th>
+                <th>@Html.DisplayNameFor(model => model.descripcion)</th>
+                <th>Operaciones</th>
 
-<table class="table" id="tabla">
-    <a asp-action="exportarExcel" asp-controller="Especialidad">Exportar Excel</a>
-    <thead class="thead-dark" >
-        <tr>
-            <th>@Html.DisplayNameFor(model=>model.iidespecilidad)</th>
-            <th>@Html.DisplayNameFor(model=>model.nombre)</th>
-            <th>@Html.DisplayNameFor(model => model.descripcion)</th>
-            <th>Operaciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (EspecialidadCLS item in Model)
-        {
-        <tr class="text-dark">
-            <td>@item.iidespecilidad</td>
-            <td>@item.nombre</td>
-            <td>@item.descripcion</td>
-            <td>
-                <!--boton eliminar-->
-                <i class="fa fa-trash btn btn-danger" aria-hidden="true"
-                   onclick="EliminarEspecialidad(@item.iidespecilidad)">
-                </i>
+            </tr>
+            <tr>
+                <!--nombrePropiedades= del metodo exportar excel-->
+                <th>
+                    <input type="checkbox" checked name="nombrePropiedades" value="iidespecilidad" />
+                    <input type="hidden" name="tipoReporte" id="tipoReporte"/> 
+                </th>
+                <th><input type="checkbox" checked name="nombrePropiedades"  value="nombre"/></th>
+                <th><input type="checkbox" checked name="nombrePropiedades" value="descripcion" /></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (EspecialidadCLS item in Model)
+            {
+                <tr class="text-dark">
+                    <td>@item.iidespecilidad</td>
+                    <td>@item.nombre</td>
+                    <td>@item.descripcion</td>
+                    <td>
+                        <!--boton eliminar-->
+                        <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                           onclick="EliminarEspecialidad(@item.iidespecilidad)">
+                        </i>
 
-                <!--boton editar-->
-                <a class="fa fa-edit btn btn-primary" aria-hidden="true"
-                   asp-controller="Especialidad" asp-action="Editar"
-                   asp-route-id="@item.iidespecilidad">
+                        <!--boton editar-->
+                        <a class="fa fa-edit btn btn-primary" aria-hidden="true"
+                           asp-controller="Especialidad" asp-action="Editar"
+                           asp-route-id="@item.iidespecilidad">
 
-                </a>
-            </td>
-        </tr>
+                        </a>
+                    </td>
+                </tr>
 
-        }
+            }
 
-    </tbody>
+        </tbody>
 
-</table>
+    </table>
+</form>
 
 <!--formulario para eliminar-->
 <form asp-action="Eliminar" asp-controller="Especialidad"
@@ -76,6 +92,23 @@
             $('#tabla').DataTable();
         });
 
+    }
+
+   //funcion para exportar excel
+    function ExportarExcel() {
+        document.getElementById("tipoReporte").value = "Excel";
+        var frmReporte = document.getElementById("frmReporte");
+        frmReporte.submit();
+    }
+
+    //funcion para exportar word
+    function ExportarWord() {
+        document.getElementById("tipoReporte").value = "Word";
+    }
+
+    //funcion para exportar Pdf
+    function ExportarPdf() {
+        document.getElementById("tipoReporte").value = "PDF";
     }
 
     function Limpiar() {

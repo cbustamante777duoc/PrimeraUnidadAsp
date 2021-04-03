@@ -13,61 +13,80 @@
     <input type="button" value="Limpiar" class="btn btn-warning" onclick="Limpiar()" />
 </form>
 
-<h1 class="text-center" >Listado de Sedes</h1>
+<!--BOTONES PARA EXPORTAR-->
+<input type="button" value="exportar Excel" class="btn btn-dark" onclick="ExportarExcel()" />
+<input type="button" value="exportar word" class="btn btn-dark" onclick="ExportarWord()" />
+<input type="button" value="exportar PDF" class="btn btn-dark" onclick="ExportarPdf()" />
 
-<table class="table" id="tabla">
-    <thead class="thead-dark">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.iidSede)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.nombreSede)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.direcion)
-            </th>
-            <th>
-                Operaciones
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.iidSede)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.nombreSede)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.direcion)
-            </td>
-            <td>
-                <!--Eliminar-->
-                <i class="fa fa-trash btn btn-danger" aria-hidden="true"
-                   onclick="EliminarSede(@item.iidSede)">
-                </i>
+<h1 class="text-center">Listado de Sedes</h1>
 
-                <!--boton editar-->
-                <a class="fa fa-edit btn btn-primary" aria-hidden="true"
-                   asp-controller="Sede" asp-action="Editar"
-                   asp-route-id="@item.iidSede">
+<!--FORMULARIO CON TABLA-->
+<form asp-controller="Sede" asp-action="Exportar" id="frmReporte">
+    <table class="table" id="tabla">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.iidSede)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nombreSede)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.direcion)
+                </th>
+                <th>
+                    Operaciones
+                </th>
+            </tr>
 
-                </a>
-            </td>
-            
-        </tr>
-}
-    </tbody>
-</table>
+            <tr>
+                <!--nombrePropiedades= del metodo exportar excel-->
+                <th>
+                    <input type="checkbox" checked name="nombrePropiedades" value="iidSede" />
+                    <input type="hidden" name="tipoReporte" id="tipoReporte" />
+                </th>
+                <th><input type="checkbox" checked name="nombrePropiedades" value="nombreSede" /></th>
+                <th><input type="checkbox" checked name="nombrePropiedades" value="direcion" /></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.iidSede)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nombreSede)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.direcion)
+                    </td>
+                    <td>
+                        <!--Eliminar-->
+                        <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                           onclick="EliminarSede(@item.iidSede)">
+                        </i>
+
+                        <!--boton editar-->
+                        <a class="fa fa-edit btn btn-primary" aria-hidden="true"
+                           asp-controller="Sede" asp-action="Editar"
+                           asp-route-id="@item.iidSede">
+
+                        </a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
 
 <!--formulario de eliminar-->
-<form asp-action="Eliminar" asp-controller="Sede" 
+<form asp-action="Eliminar" asp-controller="Sede"
       method="post" id="frmEliminar">
-    
-    <input type="hidden" id="txtIdSede"  name="iidSede"/>
+
+    <input type="hidden" id="txtIdSede" name="iidSede" />
 
 </form>
 
@@ -83,6 +102,24 @@
         });
 
     }
+
+    //funcion para exportar excel
+    function ExportarExcel() {
+        document.getElementById("tipoReporte").value = "Excel";
+        var frmReporte = document.getElementById("frmReporte");
+        frmReporte.submit();
+    }
+
+    //funcion para exportar word
+    function ExportarWord() {
+        document.getElementById("tipoReporte").value = "Word";
+    }
+
+    //funcion para exportar Pdf
+    function ExportarPdf() {
+        document.getElementById("tipoReporte").value = "PDF";
+    }
+
 
     function Buscar() {
         document.getElementById("frmEnviar").submit();
