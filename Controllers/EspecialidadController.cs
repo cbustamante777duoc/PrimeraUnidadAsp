@@ -8,6 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using cm = System.ComponentModel;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
 
 namespace MiPrimeraAppNetCore.Controllers
 {
@@ -198,16 +201,47 @@ namespace MiPrimeraAppNetCore.Controllers
             //string[] cabeceras = { "Id Especialidad", "Nombre", "Descripcion" };
             //string[] nombrePropiedades = { "iidespecilidad", "nombre", "descripcion" };
 
-            if (tipoReporte== "Excel")
+            if (tipoReporte == "Excel")
             {
 
-                byte[] buffer = exportarExcelDatos( nombrePropiedades, lista);
+                byte[] buffer = exportarExcelDatos(nombrePropiedades, lista);
                 return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
+            }
+            else if (tipoReporte == "PDF") 
+            {
+                byte[] buffer = exportarPDFDatos(nombrePropiedades, lista);
+                return File(buffer, "application/pdf");
             }
 
             return null;
           
+        }
+
+        public byte[] exportarPDFDatos<T>(string[] nombrePropiedades, List<T> lista)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                //el pdfWriter se enlasa en memoryStream
+                PdfWriter writer = new PdfWriter(ms);
+                //pdfDocument se le pasa en writer
+                using (var pdfDoc = new PdfDocument(writer))
+                {
+                    //se crea un nuevo documento
+                    Document doc = new Document(pdfDoc);
+                    //titulo
+                    Paragraph c1 = new Paragraph("Reporte en PDF");
+                    //tamanio de la letra
+                    c1.SetFontSize(20);
+                    //se agrega el titulo al PDF
+                    doc.Add(c1);
+                    //se cierra el documento
+                    doc.Close();
+                    writer.Close();
+                }
+
+                return ms.ToArray();
+            }
         }
 
 
