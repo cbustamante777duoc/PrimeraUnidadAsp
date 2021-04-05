@@ -218,31 +218,7 @@ namespace MiPrimeraAppNetCore.Controllers
           
         }
 
-        public byte[] exportarPDFDatos<T>(string[] nombrePropiedades, List<T> lista)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                //el pdfWriter se enlasa en memoryStream
-                PdfWriter writer = new PdfWriter(ms);
-                //pdfDocument se le pasa en writer
-                using (var pdfDoc = new PdfDocument(writer))
-                {
-                    //se crea un nuevo documento
-                    Document doc = new Document(pdfDoc);
-                    //titulo
-                    Paragraph c1 = new Paragraph("Reporte en PDF");
-                    //tamanio de la letra
-                    c1.SetFontSize(20);
-                    //se agrega el titulo al PDF
-                    doc.Add(c1);
-                    //se cierra el documento
-                    doc.Close();
-                    writer.Close();
-                }
-
-                return ms.ToArray();
-            }
-        }
+        
 
 
     }

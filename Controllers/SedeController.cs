@@ -128,6 +128,11 @@ namespace MiPrimeraAppNetCore.Controllers
                 return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
             }
+            else if (tipoReporte == "PDF")
+            {
+                byte[] buffer = exportarPDFDatos(nombrePropiedades, lista);
+                return File(buffer, "application/pdf");
+            }
 
             return null;
 
