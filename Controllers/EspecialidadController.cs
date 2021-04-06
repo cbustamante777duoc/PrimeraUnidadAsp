@@ -11,6 +11,8 @@ using cm = System.ComponentModel;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
+using Syncfusion.DocIO.DLS;
+using Syncfusion.DocIO;
 
 namespace MiPrimeraAppNetCore.Controllers
 {
@@ -208,17 +210,57 @@ namespace MiPrimeraAppNetCore.Controllers
                 return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
             }
-            else if (tipoReporte == "PDF") 
+            else if (tipoReporte == "PDF")
             {
                 byte[] buffer = exportarPDFDatos(nombrePropiedades, lista);
                 return File(buffer, "application/pdf");
+            }
+            else if (tipoReporte == "Word")
+            {
+                byte[] buffer = exportarDatosWord(nombrePropiedades, lista);
+                return File(buffer, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
             }
 
             return null;
           
         }
 
+        public byte [] exportarDatosWord<T>(string[] nombrePropiedades, List<T> lista) 
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                WordDocument document = new WordDocument();
+                //agregar una secion
+                WSection section = document.AddSection() as WSection;
+                //agregando un margen
+                section.PageSetup.Margins.All = 72;
+                //tamanio
+                section.PageSetup.PageSize = new Syncfusion.Drawing.SizeF(612, 792);
+                //agregando un parrafo
+                IWParagraph paragraph =  section.AddParagraph();
+                //tipo de letra
+                paragraph.ApplyStyle("Normal");
+                //centrar
+                paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
+                //agregando un texto
+                WTextRange textRange = paragraph.AppendText("Reporte en Word") as WTextRange;
+                //el texto va a tener un tamañio de 20f
+                textRange.CharacterFormat.FontSize = 20f;
+                //tipo de letra
+                textRange.CharacterFormat.FontName = "Calibri";
+                //color
+                textRange.CharacterFormat.TextColor = Syncfusion.Drawing.Color.Blue;
+
+                //guardo en documento
+                document.Save(ms, FormatType.Docx);
+
+                return ms.ToArray();
+
+            }
         
+        }
+
+
 
 
     }
