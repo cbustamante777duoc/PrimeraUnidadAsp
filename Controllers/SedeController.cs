@@ -133,6 +133,11 @@ namespace MiPrimeraAppNetCore.Controllers
                 byte[] buffer = exportarPDFDatos(nombrePropiedades, lista);
                 return File(buffer, "application/pdf");
             }
+            else if (tipoReporte == "Word")
+            {
+                byte[] buffer = exportarDatosWord(nombrePropiedades, lista);
+                return File(buffer, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            }
 
             return null;
 

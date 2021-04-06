@@ -113,6 +113,8 @@
     //funcion para exportar word
     function ExportarWord() {
         document.getElementById("tipoReporte").value = "Word";
+        var frmReporte = document.getElementById("frmReporte");
+        frmReporte.submit();
     }
 
     //funcion para exportar Pdf

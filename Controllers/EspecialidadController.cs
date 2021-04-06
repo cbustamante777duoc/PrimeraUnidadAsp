@@ -251,6 +251,40 @@ namespace MiPrimeraAppNetCore.Controllers
                 //color
                 textRange.CharacterFormat.TextColor = Syncfusion.Drawing.Color.Blue;
 
+                //agregando una tabla
+                IWTable table =  section.AddTable();
+                //numero de columnas
+                int numeroColumnas = nombrePropiedades.Length;
+                //numero de filas
+                int nfilas = lista.Count;
+                //agregando las columnas y filas de la tabla va a tener
+                table.ResetCells(nfilas+1,numeroColumnas);
+                //displayName
+                Dictionary<string, string> diccionario = cm.TypeDescriptor.GetProperties(typeof(T)).Cast<cm.PropertyDescriptor>()
+                      .ToDictionary(p => p.Name, p => p.DisplayName);
+
+                for (int i = 0; i < numeroColumnas; i++)
+                {
+                    //insertando las cabeceras
+                    table[0, i].AddParagraph().AppendText(diccionario[nombrePropiedades[i]]);
+
+                }
+                int fila = 1;
+                int col = 0;
+
+                foreach (object item in lista) 
+                {
+                    col = 0;
+                    foreach (string propiedad in nombrePropiedades)
+                    {
+                        table[fila, col].AddParagraph().AppendText(
+                            item.GetType().GetProperty(propiedad).GetValue(item).ToString());
+                        col++;
+                    }
+                    fila++;
+
+                }
+
                 //guardo en documento
                 document.Save(ms, FormatType.Docx);
 
