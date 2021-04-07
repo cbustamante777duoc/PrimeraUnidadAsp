@@ -50,7 +50,7 @@ namespace MiPrimeraAppNetCore.Controllers
                 }
                
             }
-
+            //se iguala a lista para realizar la impresion
             lista = listaPagina;
             return View(listaPagina);
         }

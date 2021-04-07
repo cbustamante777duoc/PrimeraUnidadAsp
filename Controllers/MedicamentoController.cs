@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace MiPrimeraAppNetCore.Controllers
 {
-    public class MedicamentoController : Controller
+    public class MedicamentoController : BaseController
     {
+        public static List<MedicamentoCLS> lista;
 
         public List<SelectListItem> listarFormaFarmaceutica()
         {
             List<SelectListItem> listaFormaFarmaceutica = new List<SelectListItem>();
+
             using (BDHospitalContext bd = new BDHospitalContext())
             {
                 listaFormaFarmaceutica = (from formaFarmaceutica in bd.FormaFarmaceutica
@@ -28,6 +30,7 @@ namespace MiPrimeraAppNetCore.Controllers
                     Text = "--Seleccione--",
                     Value = "" 
                 });
+             
                 return listaFormaFarmaceutica;
             }
 
@@ -75,6 +78,7 @@ namespace MiPrimeraAppNetCore.Controllers
                                         }).ToList();
                 }
             }
+            lista = listaMedicamento;
                 return View(listaMedicamento);
         }
 
@@ -190,6 +194,34 @@ namespace MiPrimeraAppNetCore.Controllers
             }
 
             return RedirectToAction("Index");
+
+        }
+
+        public FileResult Exportar(string[] nombrePropiedades, string tipoReporte)
+        {
+            //cabeceras para el excel(parte de arriba)
+            //string[] cabeceras = { "Id Especialidad", "Nombre", "Descripcion" };
+            //string[] nombrePropiedades = { "iidespecilidad", "nombre", "descripcion" };
+
+            if (tipoReporte == "Excel")
+            {
+
+                byte[] buffer = exportarExcelDatos(nombrePropiedades, lista);
+                return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            }
+            else if (tipoReporte == "PDF")
+            {
+                byte[] buffer = exportarPDFDatos(nombrePropiedades, lista);
+                return File(buffer, "application/pdf");
+            }
+            else if (tipoReporte == "Word")
+            {
+                byte[] buffer = exportarDatosWord(nombrePropiedades, lista);
+                return File(buffer, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            }
+
+            return null;
 
         }
     }
