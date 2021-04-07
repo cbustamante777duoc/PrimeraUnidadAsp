@@ -103,41 +103,43 @@ namespace MiPrimeraAppNetCore.Controllers
                     //se agrega el titulo al PDF
                     doc.Add(c1);
 
-                    //se crea un tabla con el numero de columnas
-                    Table table = new Table(nombrePropiedades.Length);
-                    Cell celda;
-
-                    for (int i = 0; i < nombrePropiedades.Length; i++)
+                    if (nombrePropiedades != null)
                     {
-                        //instacia de la celda
-                        celda = new Cell();
-                        //llenado de la tabla con los nombres de las cabezeras
-                        celda.Add(new Paragraph(diccionario[nombrePropiedades[i]]));
-                        //se pasa la celda a la tabla
-                        table.AddHeaderCell(celda);
+                        //se crea un tabla con el numero de columnas
+                        Table table = new Table(nombrePropiedades.Length);
+                        Cell celda;
 
-
-                    }
-
-                    foreach (object item in lista)
-                    {
-                        foreach (string propiedad in nombrePropiedades)
+                        for (int i = 0; i < nombrePropiedades.Length; i++)
                         {
                             //instacia de la celda
                             celda = new Cell();
-                            //se llena el contenido a la tabla
-                            celda.Add(new Paragraph(
-                                  item.GetType().GetProperty(propiedad).GetValue(item).ToString()
-                                ));
-                            //se añade la celda a la tabla
-                            table.AddCell(celda);
+                            //llenado de la tabla con los nombres de las cabezeras
+                            celda.Add(new Paragraph(diccionario[nombrePropiedades[i]]));
+                            //se pasa la celda a la tabla
+                            table.AddHeaderCell(celda);
+
 
                         }
+
+                        foreach (object item in lista)
+                        {
+                            foreach (string propiedad in nombrePropiedades)
+                            {
+                                //instacia de la celda
+                                celda = new Cell();
+                                //se llena el contenido a la tabla
+                                celda.Add(new Paragraph(
+                                      item.GetType().GetProperty(propiedad).GetValue(item).ToString()
+                                    ));
+                                //se añade la celda a la tabla
+                                table.AddCell(celda);
+
+                            }
+                        }
+
+                        //se agrega la tabla al documento
+                        doc.Add(table);
                     }
-
-                    //se agrega la tabla al documento
-                    doc.Add(table);
-
                     //se cierra el documento
                     doc.Close();
                     writer.Close();
@@ -174,39 +176,44 @@ namespace MiPrimeraAppNetCore.Controllers
                 textRange.CharacterFormat.TextColor = Syncfusion.Drawing.Color.Blue;
 
                 //agregando una tabla
-                IWTable table = section.AddTable();
-                //numero de columnas
-                int numeroColumnas = nombrePropiedades.Length;
-                //numero de filas
-                int nfilas = lista.Count;
-                //agregando las columnas y filas de la tabla va a tener
-                table.ResetCells(nfilas + 1, numeroColumnas);
-                //displayName
-                Dictionary<string, string> diccionario = cm.TypeDescriptor.GetProperties(typeof(T)).Cast<cm.PropertyDescriptor>()
-                      .ToDictionary(p => p.Name, p => p.DisplayName);
-
-                for (int i = 0; i < numeroColumnas; i++)
+                if (nombrePropiedades != null)
                 {
-                    //insertando las cabeceras
-                    table[0, i].AddParagraph().AppendText(diccionario[nombrePropiedades[i]]);
-
-                }
-                int fila = 1;
-                int col = 0;
-
-                foreach (object item in lista)
-                {
-                    col = 0;
-                    foreach (string propiedad in nombrePropiedades)
+                    IWTable table = section.AddTable();
+                    //numero de columnas
+                    int numeroColumnas = nombrePropiedades.Length;
+                    //numero de filas
+                    int nfilas = lista.Count;
+                    //agregando las columnas y filas de la tabla va a tener
+                    table.ResetCells(nfilas + 1, numeroColumnas);
+                    //displayName
+                    Dictionary<string, string> diccionario = cm.TypeDescriptor.GetProperties(typeof(T)).Cast<cm.PropertyDescriptor>()
+                          .ToDictionary(p => p.Name, p => p.DisplayName);
+                    if (nombrePropiedades != null)
                     {
-                        table[fila, col].AddParagraph().AppendText(
-                            item.GetType().GetProperty(propiedad).GetValue(item).ToString());
-                        col++;
+
+                        for (int i = 0; i < numeroColumnas; i++)
+                        {
+                            //insertando las cabeceras
+                            table[0, i].AddParagraph().AppendText(diccionario[nombrePropiedades[i]]);
+
+                        }
+                        int fila = 1;
+                        int col = 0;
+
+                        foreach (object item in lista)
+                        {
+                            col = 0;
+                            foreach (string propiedad in nombrePropiedades)
+                            {
+                                table[fila, col].AddParagraph().AppendText(
+                                    item.GetType().GetProperty(propiedad).GetValue(item).ToString());
+                                col++;
+                            }
+                            fila++;
+
+                        }
                     }
-                    fila++;
-
                 }
-
                 //guardo en documento
                 document.Save(ms, FormatType.Docx);
 

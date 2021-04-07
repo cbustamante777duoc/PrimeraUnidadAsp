@@ -13,95 +13,112 @@
     <input type="button" value="Limpiar" class="btn btn-warning" onclick="Limpiar()" />
 </form>
 
+<!--Botones para exportar-->
+<a class="btn btn-dark" asp-action="Agregar" asp-controller="Especialidad">Agregar</a>
+<input type="button" value="exportar Excel" class="btn btn-dark" onclick="ExportarExcel()" />
+<input type="button" value="exportar word" class="btn btn-dark" onclick="ExportarWord()" />
+<input type="button" value="exportar PDF" class="btn btn-dark" onclick="ExportarPdf()" />
+<input type="button" value="Imprimir" class="btn btn-dark" onclick="Imprimir()" />
+
 <h1 class="text-center">listado Pagina</h1>
-<table class="table " id="tabla">
-    <thead class="thead-dark">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.iidPagina)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.mensaje)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.accion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.controlador)
-            </th>
-            <th>
-                Operaciones
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.iidPagina)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.mensaje)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.accion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.controlador)
-            </td>
-            <td>
-                <i class="fa fa-trash btn btn-danger" aria-hidden="true"
-                   onclick="EliminarPagina(@item.iidPagina)">
-                </i>
 
-                <!--boton editar-->
-                <a class="fa fa-edit btn btn-primary" aria-hidden="true"
-                   asp-controller="Pagina" asp-action="Editar"
-                   asp-route-id="@item.iidPagina">
+<form asp-controller="Pagina" asp-action="Exportar" id="frmReporte">
+    <table class="table " id="tabla">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.iidPagina)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.mensaje)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.accion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.controlador)
+                </th>
+                <th>
+                    Operaciones
+                </th>
 
-                </a>
-            </td>
-            
-        </tr>
-}
-    </tbody>
-</table>
+            <tr id="tcheckbox">
+                <!--nombrePropiedades= del metodo exportar excel-->
+                <th>
+                    <input type="checkbox" checked name="nombrePropiedades" value="iidPagina" />
+                    <input type="hidden" name="tipoReporte" id="tipoReporte" />
+                </th>
+                <th><input type="checkbox" checked name="nombrePropiedades" value="mensaje" /></th>
+                <th><input type="checkbox" checked name="nombrePropiedades" value="accion" /></th>
+                <th><input type="checkbox" checked name="nombrePropiedades" value="controlador" /></th>
+                <th></th>
+            </tr>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.iidPagina)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.mensaje)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.accion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.controlador)
+                    </td>
+                    <td>
+                        <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                           onclick="EliminarPagina(@item.iidPagina)">
+                        </i>
 
-<form asp-action="Eliminar" asp-controller="Pagina" 
-      method="post" id="frmEliminar">
+                        <!--boton editar-->
+                        <a class="fa fa-edit btn btn-primary" aria-hidden="true"
+                           asp-controller="Pagina" asp-action="Editar"
+                           asp-route-id="@item.iidPagina">
 
-    <input id="txtId" name="iidPagina" type="hidden" />
-</form>
+                        </a>
+                    </td>
 
-<script src="~/js/sweetAlert.js"></script>
-<script src="~/js/generic.js"></script>
-
-<script>
-
-    // funcion table.js
-    window.onload = function () {
-        $(document).ready(function () {
-            $('#tabla').DataTable();
-        });
-
-    }
-
-    function Limpiar() {
-        document.getElementById("mensaje").value = "";
-        document.getElementById("frmFormulario").submit();
-
-    }
-
-    function EliminarPagina(idpagina) {
-        document.getElementById("txtId").value = idpagina;
-
-        mostrarModal().then(res => {
-            if (res.value) {
-                var frmEliminar = document.getElementById("frmEliminar");
-                frmEliminar.submit();
+                </tr>
             }
-        })
+        </tbody>
+    </table>
+    </form>
 
-    }
+    <form asp-action="Eliminar" asp-controller="Pagina"
+          method="post" id="frmEliminar">
 
-</script>
+        <input id="txtId" name="iidPagina" type="hidden" />
+    </form>
+
+    <script src="~/js/sweetAlert.js"></script>
+    <script src="~/js/generic.js"></script>
+
+    <script>
+
+      
+
+        function Limpiar() {
+            document.getElementById("mensaje").value = "";
+            document.getElementById("frmFormulario").submit();
+
+        }
+
+        function EliminarPagina(idpagina) {
+            document.getElementById("txtId").value = idpagina;
+
+            mostrarModal().then(res => {
+                if (res.value) {
+                    var frmEliminar = document.getElementById("frmEliminar");
+                    frmEliminar.submit();
+                }
+            })
+
+        }
+
+    </script>

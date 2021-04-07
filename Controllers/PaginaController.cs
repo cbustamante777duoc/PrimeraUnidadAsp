@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace MiPrimeraAppNetCore.Controllers
 {
-    public class PaginaController : Controller
+    public class PaginaController : BaseController
     {
+        public static List<PaginaCLS> lista;
         public IActionResult Index(PaginaCLS oPaginaCLS)
         {
             List<PaginaCLS> listaPagina = new List<PaginaCLS>();
@@ -48,12 +49,10 @@ namespace MiPrimeraAppNetCore.Controllers
 
                 }
                
-
-              
-
-
             }
-                return View(listaPagina);
+
+            lista = listaPagina;
+            return View(listaPagina);
         }
 
         //mostrar el formulario
@@ -190,6 +189,34 @@ namespace MiPrimeraAppNetCore.Controllers
 
             return RedirectToAction("Index");
                
+        }
+
+        public FileResult Exportar(string[] nombrePropiedades, string tipoReporte)
+        {
+            //cabeceras para el excel(parte de arriba)
+            //string[] cabeceras = { "Id Especialidad", "Nombre", "Descripcion" };
+            //string[] nombrePropiedades = { "iidespecilidad", "nombre", "descripcion" };
+
+            if (tipoReporte == "Excel")
+            {
+
+                byte[] buffer = exportarExcelDatos(nombrePropiedades, lista);
+                return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            }
+            else if (tipoReporte == "PDF")
+            {
+                byte[] buffer = exportarPDFDatos(nombrePropiedades, lista);
+                return File(buffer, "application/pdf");
+            }
+            else if (tipoReporte == "Word")
+            {
+                byte[] buffer = exportarDatosWord(nombrePropiedades, lista);
+                return File(buffer, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            }
+
+            return null;
+
         }
 
     }

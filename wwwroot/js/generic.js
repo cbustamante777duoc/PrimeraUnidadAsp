@@ -62,4 +62,30 @@ function ExportarPdf() {
     document.getElementById("tipoReporte").value = "PDF";
     var frmReporte = document.getElementById("frmReporte");
     frmReporte.submit();
+
+    //var frm = new FormData();
+    //var ckecks = document.getElementsByName("nombrePropiedades");
+    //var nckecks = ckecks.length;
+    //for (var i = 0; i < nckecks; i++) {
+    //    if (ckecks[i].checked == true) {
+
+    //        frm.append("nombrePropiedades[]", ckecks[i].value)
+    //    }
+    //}
+
+    //$.ajax({
+    //    type: "POST",
+    //    url: "Especialidad/exportarPDFDatos",
+    //    //data viene del servido lo que retorna
+    //    data: frm,
+    //    contentType: false,
+    //    processData: false,
+    //    success: function (data) {
+    //        var a = document.createElement("a");
+    //        a.href = data;
+    //        a.download = "reporte.pdf";
+    //        a.click();
+
+    //    }
+    //})
 }

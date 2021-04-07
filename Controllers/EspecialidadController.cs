@@ -222,77 +222,21 @@ namespace MiPrimeraAppNetCore.Controllers
             }
 
             return null;
-          
+
         }
 
-        public byte [] exportarDatosWord<T>(string[] nombrePropiedades, List<T> lista) 
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                WordDocument document = new WordDocument();
-                //agregar una secion
-                WSection section = document.AddSection() as WSection;
-                //agregando un margen
-                section.PageSetup.Margins.All = 72;
-                //tamanio
-                section.PageSetup.PageSize = new Syncfusion.Drawing.SizeF(612, 792);
-                //agregando un parrafo
-                IWParagraph paragraph =  section.AddParagraph();
-                //tipo de letra
-                paragraph.ApplyStyle("Normal");
-                //centrar
-                paragraph.ParagraphFormat.HorizontalAlignment = HorizontalAlignment.Center;
-                //agregando un texto
-                WTextRange textRange = paragraph.AppendText("Reporte en Word") as WTextRange;
-                //el texto va a tener un tamañio de 20f
-                textRange.CharacterFormat.FontSize = 20f;
-                //tipo de letra
-                textRange.CharacterFormat.FontName = "Calibri";
-                //color
-                textRange.CharacterFormat.TextColor = Syncfusion.Drawing.Color.Blue;
+        //public string exportarPDFDatos(string[] nombrePropiedades)
+        //{
+        //    byte[] buffer = exportarPDFDatos(nombrePropiedades, lista);
 
-                //agregando una tabla
-                IWTable table =  section.AddTable();
-                //numero de columnas
-                int numeroColumnas = nombrePropiedades.Length;
-                //numero de filas
-                int nfilas = lista.Count;
-                //agregando las columnas y filas de la tabla va a tener
-                table.ResetCells(nfilas+1,numeroColumnas);
-                //displayName
-                Dictionary<string, string> diccionario = cm.TypeDescriptor.GetProperties(typeof(T)).Cast<cm.PropertyDescriptor>()
-                      .ToDictionary(p => p.Name, p => p.DisplayName);
+        //    string cadena = Convert.ToBase64String(buffer);
+        //    //para que descarge
+        //    cadena = "data:application/pdf;base64," + cadena;
 
-                for (int i = 0; i < numeroColumnas; i++)
-                {
-                    //insertando las cabeceras
-                    table[0, i].AddParagraph().AppendText(diccionario[nombrePropiedades[i]]);
+        //    return cadena;
+        //}
 
-                }
-                int fila = 1;
-                int col = 0;
 
-                foreach (object item in lista) 
-                {
-                    col = 0;
-                    foreach (string propiedad in nombrePropiedades)
-                    {
-                        table[fila, col].AddParagraph().AppendText(
-                            item.GetType().GetProperty(propiedad).GetValue(item).ToString());
-                        col++;
-                    }
-                    fila++;
-
-                }
-
-                //guardo en documento
-                document.Save(ms, FormatType.Docx);
-
-                return ms.ToArray();
-
-            }
-        
-        }
 
 
 
