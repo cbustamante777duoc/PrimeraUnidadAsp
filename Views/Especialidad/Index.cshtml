@@ -11,6 +11,7 @@
 <input type="button" value="exportar Excel" class="btn btn-dark"  onclick="ExportarExcel()"/>
 <input type="button" value="exportar word" class="btn btn-dark" onclick="ExportarWord()" />
 <input type="button" value="exportar PDF" class="btn btn-dark" onclick="ExportarPdf()" />
+<input type="button" value="Imprimir" class="btn btn-dark" onclick="Imprimir()" />
 
 <!--FORMULARIO PARA BUSCAR Y ELIMINAR-->
 <form asp-controller="Especialidad" asp-action="Index" method="post" class="mb-2"
@@ -34,9 +35,9 @@
                 <th>Operaciones</th>
 
             </tr>
-            <tr>
+            <tr id="tcheckbox">
                 <!--nombrePropiedades= del metodo exportar excel-->
-                <th>
+                <th >
                     <input type="checkbox" checked name="nombrePropiedades" value="iidespecilidad" />
                     <input type="hidden" name="tipoReporte" id="tipoReporte"/> 
                 </th>
@@ -86,34 +87,10 @@
 
 <!--scripts-->
 <script>
-    // funcion table.js
-    window.onload = function () {
-        $(document).ready(function () {
-            $('#tabla').DataTable();
-        });
+   
 
-    }
 
-   //funcion para exportar excel
-    function ExportarExcel() {
-        document.getElementById("tipoReporte").value = "Excel";
-        var frmReporte = document.getElementById("frmReporte");
-        frmReporte.submit();
-    }
-
-    //funcion para exportar word
-    function ExportarWord() {
-        document.getElementById("tipoReporte").value = "Word";
-        var frmReporte = document.getElementById("frmReporte");
-        frmReporte.submit();
-    }
-
-    //funcion para exportar Pdf
-    function ExportarPdf() {
-        document.getElementById("tipoReporte").value = "PDF";
-        var frmReporte = document.getElementById("frmReporte");
-        frmReporte.submit();
-    }
+    
 
     function Limpiar() {
         //limpia el boton con el id nombre
