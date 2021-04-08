@@ -46,7 +46,7 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tbDatos">
             @foreach (EspecialidadCLS item in Model)
             {
                 <tr class="text-dark">
@@ -91,12 +91,41 @@
     function Buscar() {
 
         var nombre = document.getElementById("nombre").value;
+        var contenido = "";
+        var tbody = document.getElementById("tbDatos");
         $.get("Especialidad/buscarEspecialidad/?nombreEspecialidad=" + nombre, function (data) {
-            alert(JSON.stringify( data));
+            for (var i = 0; i < data.length; i++) {
+
+                contenido += "<tr>";
+                contenido += "<td>" + data[i].iidespecilidad + "</td>";
+                contenido += "<td>" + data[i].nombre + "</td>";
+                contenido += "<td>" + data[i].descripcion + "</td>";
+                contenido += `
+                <td>
+                        
+                        <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                           onclick="EliminarEspecialidad(${data[i].iidespecilidad})">
+                        </i>
+
+                        
+                        <a class="fa fa-edit btn btn-primary" aria-hidden="true"
+                           asp-controller="Especialidad" asp-action="Editar"
+                           asp-route-id="${data[i].iidespecilidad}">
+
+                        </a>
+                    </td>
+                `
+
+                contenido += "</tr>";
+
+
+            }
+
+            tbody.innerHTML = contenido;
         })
     }
 
-    
+
 
     function Limpiar() {
         //limpia el boton con el id nombre
