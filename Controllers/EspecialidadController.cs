@@ -21,6 +21,7 @@ namespace MiPrimeraAppNetCore.Controllers
         public static List<EspecialidadCLS> lista;
         public IActionResult Index(EspecialidadCLS oEspecialidadCLS)
         {
+            /*
             List<EspecialidadCLS> ListaEspecialidad = new List<EspecialidadCLS>();
             //ViewBag.mensaje = "mensaje de prueba";
             using (BDHospitalContext db = new BDHospitalContext()) 
@@ -56,6 +57,43 @@ namespace MiPrimeraAppNetCore.Controllers
             //guardo todo en la lista estatica
             lista = ListaEspecialidad;
             return View(ListaEspecialidad);
+            */
+            return View();
+        }
+
+        public List<EspecialidadCLS> listarEspecialidad()
+        {
+            List<EspecialidadCLS> ListaEspecialidad = new List<EspecialidadCLS>();
+            using (BDHospitalContext db = new BDHospitalContext())
+            {
+                
+                    ListaEspecialidad = (from especialidad in db.Especialidad
+                                         where especialidad.Bhabilitado == 1
+                                         select new EspecialidadCLS
+                                         {
+                                             iidespecilidad = especialidad.Iidespecialidad,
+                                             nombre = especialidad.Nombre,
+                                             descripcion = especialidad.Descripcion
+                                         }).ToList();
+                //ViewBag.nombreEspecialidad = "";
+
+                //else
+                //{
+                //    ListaEspecialidad = (from especialidad in db.Especialidad
+                //                         where especialidad.Bhabilitado == 1
+                //                         && especialidad.Nombre.Contains(oEspecialidadCLS.nombre)
+                //                         select new EspecialidadCLS
+                //                         {
+                //                             iidespecilidad = especialidad.Iidespecialidad,
+                //                             nombre = especialidad.Nombre,
+                //                             descripcion = especialidad.Descripcion
+                //                         }).ToList();
+                //    //para guardar lo que el usuario registro en la busqueda
+                //    ViewBag.nombreEspecialidad = oEspecialidadCLS.nombre;
+                //}
+
+                return ListaEspecialidad;
+            }
         }
 
         public List<EspecialidadCLS> buscarEspecialidad(string nombreEspecialidad) 
@@ -166,14 +204,43 @@ namespace MiPrimeraAppNetCore.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        //[HttpPost]
         //el iidespecilidad lo recibe de la vista 
-        public IActionResult Eliminar(int iidespecilidad) 
+        //public IActionResult Eliminar(int iidespecilidad) 
+        //{
+        //    string error;
+
+        //    try
+        //    {
+        //        using (BDHospitalContext bd = new BDHospitalContext())
+        //        {
+        //            Especialidad especialidad = bd.Especialidad
+        //                .Where(p => p.Iidespecialidad == iidespecilidad).First();
+
+        //            especialidad.Bhabilitado = 0;
+        //            bd.SaveChanges();
+
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        error = ex.Message;
+        //    }
+
+        //    return RedirectToAction("Index");
+        //}
+
+        public int Eliminar(int iidespecilidad)
         {
-            string error;
+            //si hay error la respuesta es 0
+            int respuesta = 0;
 
             try
             {
+               
+
                 using (BDHospitalContext bd = new BDHospitalContext())
                 {
                     Especialidad especialidad = bd.Especialidad
@@ -182,18 +249,18 @@ namespace MiPrimeraAppNetCore.Controllers
                     especialidad.Bhabilitado = 0;
                     bd.SaveChanges();
 
+                    respuesta = 1;
                 }
 
             }
             catch (Exception ex)
             {
 
-                error = ex.Message;
+                respuesta = 0;
             }
 
-            return RedirectToAction("Index");
+            return respuesta;
         }
-
 
         //recupera la informacion
         public IActionResult Editar(int id) 

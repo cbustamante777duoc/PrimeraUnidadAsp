@@ -47,19 +47,19 @@
             </tr>
         </thead>
         <tbody id="tbDatos">
-            @foreach (EspecialidadCLS item in Model)
+            @*@foreach (EspecialidadCLS item in Model)
             {
                 <tr class="text-dark">
                     <td>@item.iidespecilidad</td>
                     <td>@item.nombre</td>
                     <td>@item.descripcion</td>
                     <td>
-                        <!--boton eliminar-->
+                        boton eliminar
                         <i class="fa fa-trash btn btn-danger" aria-hidden="true"
                            onclick="EliminarEspecialidad(@item.iidespecilidad)">
                         </i>
 
-                        <!--boton editar-->
+                        boton editar
                         <a class="fa fa-edit btn btn-primary" aria-hidden="true"
                            asp-controller="Especialidad" asp-action="Editar"
                            asp-route-id="@item.iidespecilidad">
@@ -68,7 +68,7 @@
                     </td>
                 </tr>
 
-            }
+            }*@
 
         </tbody>
 
@@ -88,12 +88,61 @@
 <!--scripts-->
 <script>
 
+    window.onload = function () {
+
+    
+        var url = "Especialidad/listarEspecialidad";
+        pintar(url);
+
+    
+
+    }
+
     function Buscar() {
 
         var nombre = document.getElementById("nombre").value;
+        var url = "Especialidad/buscarEspecialidad/?nombreEspecialidad=" + nombre;
+        pintar(url);
+
+        //var contenido = "";
+        //var tbody = document.getElementById("tbDatos");
+        //$.get("Especialidad/buscarEspecialidad/?nombreEspecialidad=" + nombre, function (data) {
+        //    for (var i = 0; i < data.length; i++) {
+
+        //        contenido += "<tr>";
+        //        contenido += "<td>" + data[i].iidespecilidad + "</td>";
+        //        contenido += "<td>" + data[i].nombre + "</td>";
+        //        contenido += "<td>" + data[i].descripcion + "</td>";
+        //        contenido += `
+        //        <td>
+                        
+        //                <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+        //                   onclick="EliminarEspecialidad(${data[i].iidespecilidad})">
+        //                </i>
+
+                        
+        //                <a class="fa fa-edit btn btn-primary" aria-hidden="true"
+        //                   asp-controller="Especialidad" asp-action="Editar"
+        //                   asp-route-id="${data[i].iidespecilidad}">
+
+        //                </a>
+        //            </td>
+        //        `
+
+        //        contenido += "</tr>";
+
+
+        //    }
+
+        //    tbody.innerHTML = contenido;
+        //})
+    }
+
+    function pintar(url) {
+
         var contenido = "";
         var tbody = document.getElementById("tbDatos");
-        $.get("Especialidad/buscarEspecialidad/?nombreEspecialidad=" + nombre, function (data) {
+        $.get(url, function (data) {
             for (var i = 0; i < data.length; i++) {
 
                 contenido += "<tr>";
@@ -123,8 +172,8 @@
 
             tbody.innerHTML = contenido;
         })
-    }
 
+    }
 
 
     function Limpiar() {
@@ -137,11 +186,17 @@
 
     function EliminarEspecialidad(iidespecilidad) {
         document.getElementById("txtIdEspecialidad").value = iidespecilidad;
-
         mostrarModal().then(res => {
             if (res.value) {
-                var frmEnviarEliminar = document.getElementById("frmEnviarEliminar");
-                frmEnviarEliminar.submit();
+                //var frmEnviarEliminar = document.getElementById("frmEnviarEliminar");
+                //frmEnviarEliminar.submit();
+                $.get("Especialidad/Eliminar/?iidespecilidad="+iidespecilidad, function (respuesta) {
+                    if (respuesta == 1) {
+                        pintar("Especialidad/listarEspecialidad");
+
+                    }
+
+                })
             }
         })
 
