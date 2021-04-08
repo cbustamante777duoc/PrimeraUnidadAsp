@@ -58,6 +58,28 @@ namespace MiPrimeraAppNetCore.Controllers
             return View(ListaEspecialidad);
         }
 
+        public List<EspecialidadCLS> buscarEspecialidad(string nombreEspecialidad) 
+        {
+            List<EspecialidadCLS> ListaEspecialidad = new List<EspecialidadCLS>();
+
+            using (BDHospitalContext bd = new BDHospitalContext())
+            {
+                ListaEspecialidad = (from especialidad in bd.Especialidad
+                                     where especialidad.Bhabilitado == 1
+                                     && especialidad.Nombre.Contains(nombreEspecialidad)
+                                     select new EspecialidadCLS
+                                     {
+                                         iidespecilidad = especialidad.Iidespecialidad,
+                                         nombre = especialidad.Nombre,
+                                         descripcion = especialidad.Descripcion
+                                     }).ToList();
+               
+            }
+
+            return ListaEspecialidad;
+
+        }
+
         public IActionResult Agregar() 
         {
             return View();

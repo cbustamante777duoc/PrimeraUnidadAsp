@@ -13,14 +13,14 @@
 <input type="button" value="exportar PDF" class="btn btn-dark" onclick="ExportarPdf()" />
 <input type="button" value="Imprimir" class="btn btn-dark" onclick="Imprimir()" />
 
-<!--FORMULARIO PARA BUSCAR Y ELIMINAR-->
-<form asp-controller="Especialidad" asp-action="Index" method="post" class="mb-2"
+<!--FORMULARIO PARA BUSCAR Y LIMPIAR-->
+<div @*asp-controller="Especialidad" asp-action="Index" method="post"*@ class="mb-2"
       style="display:grid; grid-template-columns:1fr 2fr 1fr 1fr" id="frmFormulario">
     <label>Ingrese nombre especialidad</label>
     <input type="text" id="nombre" class="form form-control" name="nombre" value="@nombreEspecialidad" />
-    <input type="submit" value="Buscar" class="btn btn-info" />
+    <input type="button" value="Buscar" class="btn btn-info" onclick="Buscar()" />
     <input type="button" value="Limpiar" class="btn btn-warning" onclick="Limpiar()"/>
-</form>
+</div>
 
 <h1 class="text-center">lista de especialidad</h1>
 <!--FORMULARIO PARA EXPORTAR ADEMAS TIENE UNA TABLA-->
@@ -87,8 +87,14 @@
 
 <!--scripts-->
 <script>
-   
 
+    function Buscar() {
+
+        var nombre = document.getElementById("nombre").value;
+        $.get("Especialidad/buscarEspecialidad/?nombreEspecialidad=" + nombre, function (data) {
+            alert(JSON.stringify( data));
+        })
+    }
 
     
 
