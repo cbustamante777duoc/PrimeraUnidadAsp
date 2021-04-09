@@ -78,6 +78,72 @@ namespace MiPrimeraAppNetCore.Controllers
             return View(listaPersona);
         }
 
+        public List<PersonaCLS> listarPersona()
+        {
+            List<PersonaCLS> listaPersona = new List<PersonaCLS>();
+            using (BDHospitalContext db = new BDHospitalContext()) 
+            {
+                listaPersona = (from persona in db.Persona
+                                join sexo in db.Sexo
+                                on persona.Iidsexo equals sexo.Iidsexo
+                                where persona.Bhabilitado == 1
+                                select new PersonaCLS
+                                {
+                                    iidPersona = persona.Iidpersona,
+                                    nombreCompleto = persona.Nombre + " " + persona.Appaterno +
+                                                    " " + persona.Apmaterno,
+                                    email = persona.Email,
+                                    nombreSexo = sexo.Nombre
+                                }).ToList();
+            }
+            return listaPersona;
+        }
+
+        //la ? significa que soporta nulos
+        public List<PersonaCLS> buscarPersona(int? iidsexo)
+        {
+            List<PersonaCLS> listaPersona = new List<PersonaCLS>();
+            using (BDHospitalContext db = new BDHospitalContext())
+            {
+                if (iidsexo==null || iidsexo==0)
+                {
+                    listaPersona = (from persona in db.Persona
+                                    join sexo in db.Sexo
+                                    on persona.Iidsexo equals sexo.Iidsexo
+                                    where persona.Bhabilitado == 1
+                                    select new PersonaCLS
+                                    {
+                                        iidPersona = persona.Iidpersona,
+                                        nombreCompleto = persona.Nombre + " " + persona.Appaterno +
+                                                        " " + persona.Apmaterno,
+                                        email = persona.Email,
+                                        nombreSexo = sexo.Nombre
+                                    }).ToList();
+
+                }
+                else
+                {
+                    listaPersona = (from persona in db.Persona
+                                    join sexo in db.Sexo
+                                    on persona.Iidsexo equals sexo.Iidsexo
+                                    where persona.Bhabilitado == 1
+                                    && persona.Iidsexo == iidsexo
+                                    select new PersonaCLS
+                                    {
+                                        iidPersona = persona.Iidpersona,
+                                        nombreCompleto = persona.Nombre + " " + persona.Appaterno +
+                                                        " " + persona.Apmaterno,
+                                        email = persona.Email,
+                                        nombreSexo = sexo.Nombre
+                                    }).ToList();
+
+                }
+                
+            }
+
+            return listaPersona;
+        }
+
         public IActionResult Agregar()
         {
             LlenarSexo();

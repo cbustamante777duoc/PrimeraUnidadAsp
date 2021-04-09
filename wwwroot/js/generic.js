@@ -89,3 +89,56 @@ function ExportarPdf() {
     //    }
     //})
 }
+
+//url la hacer la llamada a localhost
+//campos array para poder personalizar
+//propiedadId=id
+//nombreController = nombre del contralor
+function pintar(url, campos, propiedadId, nombreController) {
+
+    var contenido = "";
+    var tbody = document.getElementById("tbDatos");
+    //declaracion de las variables para ser usadas en el for
+    var nombreCampo;
+    var objetoActual;
+
+
+    $.get(url, function (data) {
+        for (var i = 0; i < data.length; i++) {
+
+            contenido += "<tr>";
+            for (var j = 0; j < campos.length; j++) {
+                //para obtern los nombres de los campos
+                nombreCampo = campos[j];
+                objetoActual = data[i];
+                contenido += "<td>" + objetoActual[nombreCampo] + "</td>";
+
+            }
+            //contenido += "<td>" + data[i].iidespecilidad + "</td>";
+            //contenido += "<td>" + data[i].nombre + "</td>";
+            //contenido += "<td>" + data[i].descripcion + "</td>";
+            contenido += `
+                <td>
+                        
+                        <i class="fa fa-trash btn btn-danger" aria-hidden="true"
+                           onclick="EliminarEspecialidad(${objetoActual[propiedadId]})">
+                        </i>
+
+                        
+                        <a  
+                           href="${nombreController}/Editar/${objetoActual[propiedadId]}"
+                         >
+                           <i class="fa fa-edit btn btn-primary" aria-hidden="true" ></i>
+                        </a>
+                    </td>
+                `
+
+            contenido += "</tr>";
+
+
+        }
+
+        tbody.innerHTML = contenido;
+    })
+
+}

@@ -102,15 +102,31 @@ namespace MiPrimeraAppNetCore.Controllers
 
             using (BDHospitalContext bd = new BDHospitalContext())
             {
-                ListaEspecialidad = (from especialidad in bd.Especialidad
-                                     where especialidad.Bhabilitado == 1
-                                     && especialidad.Nombre.Contains(nombreEspecialidad)
-                                     select new EspecialidadCLS
-                                     {
-                                         iidespecilidad = especialidad.Iidespecialidad,
-                                         nombre = especialidad.Nombre,
-                                         descripcion = especialidad.Descripcion
-                                     }).ToList();
+                if (nombreEspecialidad == null || nombreEspecialidad == "") 
+                {
+                    ListaEspecialidad = (from especialidad in bd.Especialidad
+                                         where especialidad.Bhabilitado == 1
+                                         select new EspecialidadCLS
+                                         {
+                                             iidespecilidad = especialidad.Iidespecialidad,
+                                             nombre = especialidad.Nombre,
+                                             descripcion = especialidad.Descripcion
+                                         }).ToList();
+                }
+                else
+                {
+                    ListaEspecialidad = (from especialidad in bd.Especialidad
+                                         where especialidad.Bhabilitado == 1
+                                         && especialidad.Nombre.Contains(nombreEspecialidad)
+                                         select new EspecialidadCLS
+                                         {
+                                             iidespecilidad = especialidad.Iidespecialidad,
+                                             nombre = especialidad.Nombre,
+                                             descripcion = especialidad.Descripcion
+                                         }).ToList();
+
+                }
+                    
                
             }
 
